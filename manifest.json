@@ -1,15 +1,30 @@
 {
   "name": "Redford Stack Trainer",
   "short_name": "StackTrainer",
+  "description": "Master the Redford Stack with voice-controlled drills.",
   "start_url": "index.html",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#3e362e",
   "theme_color": "#a98467",
   "icons": [
     {
-      "src": "https://cdn-icons-png.flaticon.com/512/2067/2067140.png",
+      "src": "rsl.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "rsl.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "rsl.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ]
 }
