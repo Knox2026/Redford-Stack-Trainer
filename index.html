@@ -507,10 +507,22 @@
     document.getElementById('answer').addEventListener('keypress', (e) => { if (e.key === 'Enter') validate(e.target.value); });
 
     /* -------------------------------------------------------------------
-       VOICE ENGINE SCRIPT (TTS, STT, NORMALIZE, WAKE LOCK)
+       HD VOICE ENGINE (Clean Audio & Voice Selection)
     ------------------------------------------------------------------- */
     const voiceNames = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
-    let isSpeaking = false, audioContext;
+    let isSpeaking = false, audioContext, preferredVoice = null;
+
+    function loadVoices() {
+        let voices = window.speechSynthesis.getVoices();
+        // Target high-quality Google or Premium English voices
+        preferredVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en-US')) ||
+                         voices.find(v => v.name.includes('Premium')) ||
+                         voices.find(v => v.lang.includes('en-US')) ||
+                         voices[0];
+    }
+
+    window.speechSynthesis.onvoiceschanged = loadVoices;
+    loadVoices();
 
     function resumeAudio() {
         try {
@@ -530,14 +542,23 @@
 
     function speak(text) {
         if(!voiceMode) return;
+        
+        // Flush buffer to clear static
+        window.speechSynthesis.cancel();
         resumeAudio();
+
         setTimeout(() => {
             let msg = new SpeechSynthesisUtterance(text);
-            msg.rate = 1.0; msg.volume = 1.0;
+            if (preferredVoice) msg.voice = preferredVoice;
+            
+            msg.rate = 1.05; // Natural pace
+            msg.pitch = 1.0; 
+            msg.volume = 1.0;
+
             msg.onstart = () => { isSpeaking = true; updateMicIcon(false); };
             msg.onend = () => { isSpeaking = false; updateMicIcon(true); };
             window.speechSynthesis.speak(msg);
-        }, 250);
+        }, 150);
     }
 
     function updateMicIcon(isListening) {
