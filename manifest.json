@@ -1,0 +1,15 @@
+{
+  "name": "Redford Stack Trainer",
+  "short_name": "StackTrainer",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#3e362e",
+  "theme_color": "#a98467",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/2067/2067140.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
