@@ -145,6 +145,10 @@
 
         .heat-map { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; margin-bottom: 15px; }
         .heat-cell { aspect-ratio: 1; font-size: 0.65em; display: flex; align-items: center; justify-content: center; background: var(--heat-base); border-radius: 3px; font-weight: bold; color: var(--text-color); }
+        
+        /* Debug Console Style */
+        .debug-console { font-size: 0.65em; background: rgba(0,0,0,0.1); color: var(--text-color); padding: 5px; border-radius: 5px; height: 1.2em; overflow: hidden; font-family: monospace; opacity: 0.6; margin-top: 10px; }
+
         .hidden { display: none; }
     </style>
 </head>
@@ -247,6 +251,8 @@
             <button id="btn-BA" class="action-btn" style="grid-column: span 2;" onclick="setMode('BA')">Before / After</button>
         </div>
     </div>
+    
+    <div id="voiceDebug" class="debug-console">Mic status: standby</div>
 </div>
 
 <script>
@@ -538,35 +544,111 @@
 
     let recognition;
     function initVoiceRecognition() {
-        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
-        if(!SpeechRecognition) { alert("This device's internal browser does not support Speech Recognition."); return; }
-        if(recognition) recognition.stop();
-        recognition = new SpeechRecognition();
-        recognition.continuous = true; recognition.interimResults = false; recognition.lang = 'en-US';
+        const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+        if(!SpeechRecognition) { 
+            document.getElementById('voiceDebug').innerText = "System: No Speech Engine Found";
+            return; 
+        }
+        
+        // Android/Chrome APK Permission requester
+        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            navigator.mediaDevices.getUserMedia({ audio: true })
+                .then(function(stream) {
+                    document.getElementById('voiceDebug').innerText = "Hardware: Mic Access Granted";
+                    startRecognitionEngine(SpeechRecognition);
+                })
+                .catch(function(err) {
+                    document.getElementById('voiceDebug').innerText = "Hardware Error: " + err.name;
+                    startRecognitionEngine(SpeechRecognition);
+                });
+        } else {
+            startRecognitionEngine(SpeechRecognition);
+        }
+    }
+
+    function startRecognitionEngine(SpeechComp) {
+        if(recognition) { recognition.onend = null; recognition.stop(); }
+        
+        recognition = new SpeechComp();
+        recognition.continuous = true; 
+        recognition.interimResults = false; 
+        recognition.lang = 'en-US';
+        recognition.maxAlternatives = 3; 
+
         recognition.onresult = (event) => {
             if (isSpeaking) return; 
-            let result = event.results[event.results.length - 1][0].transcript.toLowerCase();
-            processVoiceInput(result);
+            const results = event.results[event.results.length - 1];
+            for (let i = 0; i < results.length; i++) {
+                let transcript = results[i].transcript.toLowerCase();
+                document.getElementById('voiceDebug').innerText = "Heard: " + transcript;
+                if (processVoiceInput(transcript)) break;
+            }
         };
+        
         recognition.onerror = (e) => { 
-            console.log("Mic Error:", e.error);
-            if(voiceMode && (e.error === 'no-speech' || e.error === 'audio-capture')) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 500);
+            document.getElementById('voiceDebug').innerText = "Mic error: " + e.error;
+            if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 1000);
         };
-        recognition.onend = () => { if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); };
-        try { recognition.start(); updateMicIcon(true); } catch(e) { console.log("Mic Initialization Failed:", e); }
+        
+        recognition.onend = () => { 
+            if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); 
+        };
+        
+        try { 
+            recognition.start(); 
+            updateMicIcon(true); 
+            if(document.getElementById('voiceDebug').innerText.includes("standby")) {
+                document.getElementById('voiceDebug').innerText = "Mic Engine Started";
+            }
+        } catch(e) { console.log("Mic Start Fail:", e); }
     }
 
     function processVoiceInput(text) {
-        text = text.replace('clovers', 'clubs').replace('diamond', 'diamonds').replace('heart', 'hearts').replace('spade', 'spades');
-        text = text.replace('of ', ' '); 
+        // Translation Table for common "mis-hears"
+        let input = text.toLowerCase()
+            .replace(/\bto\b/g, '2')
+            .replace(/\btoo\b/g, '2')
+            .replace(/\bfor\b/g, '4')
+            .replace(/\bfour\b/g, '4')
+            .replace(/\bate\b/g, '8')
+            .replace(/\beight\b/g, '8')
+            .replace(/\bone\b/g, '1')
+            .replace(/\bwon\b/g, '1')
+            .replace(/\bthree\b/g, '3')
+            .replace(/\bfive\b/g, '5')
+            .replace(/\bsix\b/g, '6')
+            .replace(/\bseven\b/g, '7')
+            .replace(/\bnine\b/g, '9')
+            .replace(/\bten\b/g, '10')
+            .replace(/clovers/g, 'clubs')
+            .replace(/diamond/g, 'diamonds')
+            .replace(/heart/g, 'hearts')
+            .replace(/spade/g, 'spades')
+            .replace(/of /g, '');
+
         let suits = {"hearts":"H", "diamonds":"D", "clubs":"C", "spades":"S"}, faces = {"ace":"A", "king":"K", "queen":"Q", "jack":"J", "ten":"10"};
         let foundSuit = null, foundVal = null;
-        for(let s in suits) { if(text.includes(s)) foundSuit = suits[s]; }
-        for(let f in faces) { if(text.includes(f)) foundVal = faces[f]; }
-        let numMatch = text.match(/[2-9]/);
+
+        for(let s in suits) { if(input.includes(s)) foundSuit = suits[s]; }
+        for(let f in faces) { if(input.includes(f)) foundVal = faces[f]; }
+        
+        // Improved Number Match (Look for specific numbers 1-52 as whole words)
+        let numMatch = input.match(/\b([1-9]|[1-4][0-9]|5[0-2])\b/);
         if(numMatch && !foundVal) foundVal = numMatch[0];
-        if(foundSuit && foundVal) validate(foundVal + foundSuit); 
-        else { let digits = text.match(/\d+/); if(digits) validate(digits[0]); }
+
+        if(foundSuit && foundVal) { 
+            validate(foundVal + foundSuit); 
+            return true; 
+        } 
+        else { 
+            // Case: Spoken single digit or number for Card-to-Number
+            let digits = input.match(/\d+/); 
+            if(digits) {
+                validate(digits[0]);
+                return true;
+            }
+        }
+        return false;
     }
 
     async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {} }
