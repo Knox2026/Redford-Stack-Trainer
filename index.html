@@ -514,7 +514,6 @@
 
     function loadVoices() {
         let voices = window.speechSynthesis.getVoices();
-        // Target high-quality Google or Premium English voices
         preferredVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en-US')) ||
                          voices.find(v => v.name.includes('Premium')) ||
                          voices.find(v => v.lang.includes('en-US')) ||
@@ -542,19 +541,12 @@
 
     function speak(text) {
         if(!voiceMode) return;
-        
-        // Flush buffer to clear static
         window.speechSynthesis.cancel();
         resumeAudio();
-
         setTimeout(() => {
             let msg = new SpeechSynthesisUtterance(text);
             if (preferredVoice) msg.voice = preferredVoice;
-            
-            msg.rate = 1.05; // Natural pace
-            msg.pitch = 1.0; 
-            msg.volume = 1.0;
-
+            msg.rate = 1.05; msg.pitch = 1.0; msg.volume = 1.0;
             msg.onstart = () => { isSpeaking = true; updateMicIcon(false); };
             msg.onend = () => { isSpeaking = false; updateMicIcon(true); };
             window.speechSynthesis.speak(msg);
@@ -630,18 +622,20 @@
 
     function processVoiceInput(text) {
         let input = text.toLowerCase().trim();
-        
+        document.getElementById('voiceDebug').innerText = "Heard: " + input;
+
+        // Phonetic Mapping Focus: Specifically on 5 and 7 misinterpretations
         const phoneticMap = {
             "to": "2", "too": "2", "two": "2",
-            "for": "4", "fore": "4", "four": "4", "floor": "4",
-            "ate": "8", "eight": "8", "aitch": "8",
-            "one": "1", "won": "1",
             "three": "3", "tree": "3",
-            "five": "5", "hive": "5",
+            "for": "4", "fore": "4", "four": "4", "floor": "4",
+            "five": "5", "fine": "5", "fire": "5", "hive": "5", "find": "5",
             "six": "6", "sex": "6",
-            "seven": "7",
-            "nine": "9", "line": "9",
-            "ten": "10", "tin": "10", "then": "10"
+            "seven": "7", "heaven": "7", "savin": "7", "level": "7",
+            "ate": "8", "eight": "8", "aitch": "8",
+            "nine": "9", "line": "9", "mine": "9",
+            "ten": "10", "tin": "10", "then": "10",
+            "one": "1", "won": "1"
         };
 
         for (let word in phoneticMap) {
@@ -656,9 +650,9 @@
 
         for (let s in suits) { if (input.includes(s)) { foundSuit = suits[s]; break; } }
         for (let f in faces) { if (input.includes(f)) { foundVal = faces[f]; break; } }
-
+        
         if (!foundVal) {
-            let numMatch = input.match(/\b(10|[1-9])\b/);
+            let numMatch = input.match(/(10|[1-9])/); 
             if (numMatch) foundVal = numMatch[0];
         }
 
