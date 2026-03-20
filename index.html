@@ -146,7 +146,6 @@
         .heat-map { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; margin-bottom: 15px; }
         .heat-cell { aspect-ratio: 1; font-size: 0.65em; display: flex; align-items: center; justify-content: center; background: var(--heat-base); border-radius: 3px; font-weight: bold; color: var(--text-color); }
         
-        /* Debug Console Style */
         .debug-console { font-size: 0.65em; background: rgba(0,0,0,0.1); color: var(--text-color); padding: 5px; border-radius: 5px; height: 1.2em; overflow: hidden; font-family: monospace; opacity: 0.6; margin-top: 10px; }
 
         .hidden { display: none; }
@@ -550,7 +549,6 @@
             return; 
         }
         
-        // Android/Chrome APK Permission requester
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
             navigator.mediaDevices.getUserMedia({ audio: true })
                 .then(function(stream) {
@@ -604,46 +602,46 @@
     }
 
     function processVoiceInput(text) {
-        // Translation Table for common "mis-hears"
-        let input = text.toLowerCase()
-            .replace(/\bto\b/g, '2')
-            .replace(/\btoo\b/g, '2')
-            .replace(/\bfor\b/g, '4')
-            .replace(/\bfour\b/g, '4')
-            .replace(/\bate\b/g, '8')
-            .replace(/\beight\b/g, '8')
-            .replace(/\bone\b/g, '1')
-            .replace(/\bwon\b/g, '1')
-            .replace(/\bthree\b/g, '3')
-            .replace(/\bfive\b/g, '5')
-            .replace(/\bsix\b/g, '6')
-            .replace(/\bseven\b/g, '7')
-            .replace(/\bnine\b/g, '9')
-            .replace(/\bten\b/g, '10')
-            .replace(/clovers/g, 'clubs')
-            .replace(/diamond/g, 'diamonds')
-            .replace(/heart/g, 'hearts')
-            .replace(/spade/g, 'spades')
-            .replace(/of /g, '');
+        let input = text.toLowerCase().trim();
+        
+        const phoneticMap = {
+            "to": "2", "too": "2", "two": "2",
+            "for": "4", "fore": "4", "four": "4", "floor": "4",
+            "ate": "8", "eight": "8", "aitch": "8",
+            "one": "1", "won": "1",
+            "three": "3", "tree": "3",
+            "five": "5", "hive": "5",
+            "six": "6", "sex": "6",
+            "seven": "7",
+            "nine": "9", "line": "9",
+            "ten": "10", "tin": "10", "then": "10"
+        };
 
-        let suits = {"hearts":"H", "diamonds":"D", "clubs":"C", "spades":"S"}, faces = {"ace":"A", "king":"K", "queen":"Q", "jack":"J", "ten":"10"};
+        for (let word in phoneticMap) {
+            let reg = new RegExp("\\b" + word + "\\b", "g");
+            input = input.replace(reg, phoneticMap[word]);
+        }
+
+        const suits = { "hearts": "H", "heart": "H", "diamonds": "D", "diamond": "D", "clubs": "C", "club": "C", "spades": "S", "spade": "S" };
+        const faces = { "ace": "A", "ice": "A", "king": "K", "can": "K", "queen": "Q", "green": "Q", "quinn": "Q", "jack": "J", "check": "J", "ten": "10" };
+        
         let foundSuit = null, foundVal = null;
 
-        for(let s in suits) { if(input.includes(s)) foundSuit = suits[s]; }
-        for(let f in faces) { if(input.includes(f)) foundVal = faces[f]; }
-        
-        // Improved Number Match (Look for specific numbers 1-52 as whole words)
-        let numMatch = input.match(/\b([1-9]|[1-4][0-9]|5[0-2])\b/);
-        if(numMatch && !foundVal) foundVal = numMatch[0];
+        for (let s in suits) { if (input.includes(s)) { foundSuit = suits[s]; break; } }
+        for (let f in faces) { if (input.includes(f)) { foundVal = faces[f]; break; } }
 
-        if(foundSuit && foundVal) { 
-            validate(foundVal + foundSuit); 
-            return true; 
-        } 
-        else { 
-            // Case: Spoken single digit or number for Card-to-Number
-            let digits = input.match(/\d+/); 
-            if(digits) {
+        if (!foundVal) {
+            let numMatch = input.match(/\b(10|[1-9])\b/);
+            if (numMatch) foundVal = numMatch[0];
+        }
+
+        if (foundSuit && foundVal) {
+            validate(foundVal + foundSuit);
+            return true;
+        } else {
+            let digits = input.match(/\d+/);
+            if (digits) {
+                if (currentMode === 'N2C' && digits[0] == currentTarget.pos) return false;
                 validate(digits[0]);
                 return true;
             }
