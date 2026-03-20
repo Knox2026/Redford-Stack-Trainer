@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Stack Trainer Pro</title>
+    <style>
+        :root {
+            --bg-color: #3e362e;
+            --container-bg: #ede0d4;
+            --text-color: #432818;
+            --correct-color: #6a994e;
+            --wrong-color: #bc4749;
+            --ai-color: #457b9d;
+            --btn-color: #a98467;
+            --btn-hover: #8d6b51;
+            --btn-text: #ffffff;
+            --card-bg: white;
+            --tray-bg: rgba(0,0,0,0.05);
+            --heat-base: #e3d5ca;
+            --heat-btn-bg: #432818;
+            --heat-btn-text: #ffffff;
+            --border-color: rgba(0,0,0,0.1);
+            --toggle-active-bg: #ffffff;
+            --toggle-active-text: #432818;
+            --num-bg: #d5bdaf;
+            --neon-mic: #39ff14;
+        }
+
+        body.dark-theme {
+            --bg-color: #121212;
+            --container-bg: #1e1e1e;
+            --text-color: #e0e0e0;
+            --btn-color: #3d3d3d;
+            --btn-hover: #505050;
+            --btn-text: #ffffff;
+            --card-bg: #2d2d2d;
+            --tray-bg: rgba(255,255,255,0.05);
+            --heat-base: #333333;
+            --heat-btn-bg: #e0e0e0;
+            --heat-btn-text: #121212;
+            --border-color: rgba(255,255,255,0.1);
+            --toggle-active-bg: #f5ebe0;
+            --toggle-active-text: #121212;
+            --num-bg: #404040;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            display: flex; justify-content: center; align-items: center; 
+            min-height: 100vh; padding: 10px; margin: 0; box-sizing: border-box;
+            transition: background-color 0.3s ease;
+        }
+
+        .container {
+            background-color: var(--container-bg);
+            max-width: 650px; width: 100%; padding: 20px; border-radius: 15px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.4); text-align: center;
+            display: flex; flex-direction: column; max-height: 98vh; overflow-y: auto;
+            scrollbar-width: none;
+        }
+        .container::-webkit-scrollbar { display: none; }
+
+        .menu-header { display: flex; align-items: center; margin-bottom: 15px; width: 100%; gap: 8px; }
+        .header-right-group { display: flex; gap: 8px; flex: 1; justify-content: flex-end; }
+
+        button { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: none; outline: none; display: flex; align-items: center; justify-content: center; }
+        button:active { transform: scale(0.95); }
+
+        .theme-toggle-btn, .stack-view-btn, .heat-view-btn, .voice-status-btn { background: var(--btn-color); color: var(--btn-text); width: 42px; height: 38px; border-radius: 8px; font-size: 1.1em; }
+        .settings-toggle-btn, .history-toggle-btn { background: var(--btn-color); color: var(--btn-text); padding: 8px 15px; border-radius: 8px; font-size: 0.85em; font-weight: bold; }
+        
+        #settingsTray, #historyTray, #stackTray, #modeTray { background: var(--tray-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); }
+
+        .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 4px; padding: 5px; font-size: 0.75em; }
+        .stack-item { background: var(--card-bg); border-radius: 6px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; cursor: pointer; }
+        .stack-num { font-weight: 800; font-size: 0.8em; color: var(--text-color); background: var(--num-bg); padding: 2px 0; width: 100%; }
+        .stack-val-label { padding: 4px 0; font-weight: bold; font-size: 1.1em; }
+
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
+        .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 300px; width: 90%; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; }
+        .modal-close { position: absolute; top: 10px; right: 10px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
+        .stat-row { display: flex; justify-content: space-between; margin: 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 500; }
+
+        .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
+        .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
+        .history-table td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); }
+        .best-acc { background-color: rgba(255, 235, 59, 0.1) !important; font-weight: bold; } 
+        .speed-hit { color: var(--correct-color); font-weight: bold; }
+        .badge { font-size: 1.2em; margin-left: 5px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4)); vertical-align: middle; }
+
+        .scoreboard { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 12px; margin-bottom: 15px; font-weight: bold; font-size: 1.1em; }
+        .stat-val { margin-left: 4px; }
+        .green { color: var(--correct-color); }
+        .red { color: var(--wrong-color); }
+
+        .card-display { height: 280px; display: flex; align-items: center; justify-content: center; margin: 10px 0; border-radius: 12px; }
+        
+        .number-card {
+            height: 200px; aspect-ratio: 2.5 / 3.5;
+            background: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 100px; color: #1a1a1a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #ccc;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            font-weight: 700;
+        }
+
+        .card-img { height: 200px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); object-fit: contain; }
+
+        .prompt-label {
+            font-size: 1.4rem; font-weight: 900; letter-spacing: 2px;
+            margin-bottom: 10px; background: rgba(0,0,0,0.08);
+            padding: 4px 15px; border-radius: 20px; text-transform: uppercase;
+        }
+
+        .input-area { min-height: 90px; margin: 10px 0; }
+        input[type="text"], input[type="number"] { padding: 10px; border-radius: 8px; border: 1px solid var(--btn-color); background: var(--card-bg); color: var(--text-color); font-size: 1rem; }
+
+        .toggle-group { display: flex; gap: 8px; margin-bottom: 15px; align-items: center; justify-content: center; }
+        .toggle-sub-group { display: flex; flex: 2; gap: 0; background: rgba(0,0,0,0.25); border-radius: 8px; padding: 4px; }
+        .toggle-group button { flex: 1; background: transparent; color: var(--text-color); padding: 10px 2px; font-weight: bold; font-size: 0.7em; border-radius: 6px; }
+        .toggle-sub-group button.active { background: var(--toggle-active-bg); color: var(--toggle-active-text); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+        button.separate-btn { background: rgba(0,0,0,0.15); border: 1px solid var(--border-color); padding: 14px 2px; }
+        button#aiBtn.active, button#voiceBtn.active { background-color: var(--ai-color); color: white; border: 1px solid var(--ai-color); box-shadow: 0 2px 10px rgba(0,0,0,0.3); }
+
+        .voice-status-btn { display: none; align-items: center; justify-content: center; transition: all 0.3s ease; }
+        .voice-status-btn.active-mode { display: flex; }
+        .mic-icon { width: 22px; height: 22px; fill: #555; transition: all 0.3s ease; display: block; }
+        .listening .mic-icon { fill: var(--neon-mic); filter: drop-shadow(0 0 5px var(--neon-mic)); animation: pulse-mic 1.5s infinite; }
+        @keyframes pulse-mic { 0% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.15); opacity: 0.8; } 100% { transform: scale(1); opacity: 1; } }
+
+        .choice-container { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; }
+        .choice-btn { padding: 12px 15px; background: var(--card-bg); color: var(--text-color); border: 2px solid var(--btn-color); border-radius: 10px; min-width: 65px; font-weight: bold; font-size: 1.1em; }
+        .choice-btn:hover { background-color: var(--btn-color); color: white; }
+
+        .btn-group { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin-top: 10px; }
+        button.action-btn { padding: 12px; border-radius: 8px; background-color: var(--btn-color); color: white; font-weight: bold; font-size: 0.85em; }
+        button.action-btn.selected-mode { border: 2px solid var(--text-color); background-color: var(--btn-hover); }
+        button.start { background-color: var(--correct-color); grid-column: span 2; font-size: 1.1em; padding: 15px; margin-bottom: 5px; }
+        button.mode-trigger { background-color: var(--btn-color); grid-column: span 2; font-size: 1.1em; padding: 12px; margin-bottom: 5px; }
+
+        .heat-map { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; margin-bottom: 15px; }
+        .heat-cell { aspect-ratio: 1; font-size: 0.65em; display: flex; align-items: center; justify-content: center; background: var(--heat-base); border-radius: 3px; font-weight: bold; color: var(--text-color); }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<div id="cardModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="modal-close" onclick="closeModal()">×</span>
+        <div id="modalCardTitle" style="font-size: 2rem; margin-bottom: 15px; font-weight: bold;"></div>
+        <div class="stat-row"><span>Stats (✔/✖/Total):</span> <span id="modalStats">0/0/0</span></div>
+        <div class="stat-row"><span>Accuracy:</span> <span id="modalAcc">0%</span></div>
+        <div class="stat-row"><span>Avg Speed:</span> <span id="modalSpeed">0s</span></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="menu-header">
+        <button id="themeBtn" class="theme-toggle-btn" onclick="toggleTheme()">🌙</button>
+        <button class="stack-view-btn" onclick="toggleStackView()">📋</button>
+        <button class="heat-view-btn" onclick="toggleHeatMap()">🔥</button>
+        <div id="micStatus" class="voice-status-btn">
+            <svg class="mic-icon" viewBox="0 0 24 24">
+                <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/>
+                <path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+            </svg>
+        </div>
+        <div class="header-right-group">
+            <button class="settings-toggle-btn" onclick="toggleSettings()">⚙ Settings</button>
+            <button class="history-toggle-btn" onclick="toggleHistory()">🏆 Stats</button>
+        </div>
+    </div>
+
+    <div id="stackTray" class="hidden">
+        <div style="font-weight: bold; margin-bottom: 5px;">Redford Stack Reference</div>
+        <div style="font-size: 0.7em; margin-bottom: 10px; opacity: 0.7;">(Click a card for stats)</div>
+        <div id="stackList" class="stack-grid"></div>
+    </div>
+
+    <div id="heatMap" class="heat-map hidden"></div>
+
+    <div id="settingsTray" class="hidden">
+        <div class="toggle-group">
+            <div class="toggle-sub-group">
+                <button id="modeType" onclick="setInputMethod('type')">Type</button>
+                <button id="modeChoice" onclick="setInputMethod('choice')">M. Choice</button>
+            </div>
+            <button id="aiBtn" class="separate-btn" onclick="toggleAI()">AI: OFF</button>
+            <button id="voiceBtn" class="separate-btn" onclick="toggleVoice()">Voice: OFF</button>
+        </div>
+        <div style="font-size: 0.9em; display: flex; align-items: center; justify-content: center; gap: 10px;">
+            Range: <input type="number" id="minRange" value="1" min="1" max="52" style="width: 45px;" onchange="saveAll()"> 
+            to <input type="number" id="maxRange" value="52" min="1" max="52" style="width: 45px;" onchange="saveAll()">
+            <button onclick="clearHistory()" style="background: var(--wrong-color); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.8em;">Wipe Data</button>
+        </div>
+    </div>
+
+    <div id="historyTray" class="hidden">
+        <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Lifetime Accuracy: <span id="lifetime-pct">0%</span></div>
+        <table class="history-table">
+            <thead>
+                <tr>
+                    <th>Session</th>
+                    <th>✔/✖</th>
+                    <th>Total</th>
+                    <th>Acc %</th>
+                    <th>Time</th>
+                    <th>Pace</th>
+                </tr>
+            </thead>
+            <tbody id="historyBody"></tbody>
+        </table>
+    </div>
+
+    <div class="scoreboard">
+        <div>✔<span id="score-correct" class="stat-val green">0</span></div>
+        <div>✖<span id="score-wrong" class="stat-val red">0</span></div>
+        <div>Total<span id="score-total" class="stat-val">0</span></div>
+    </div>
+
+    <div id="display" class="card-display">Ready?</div>
+
+    <div class="input-area">
+        <div id="typeInputGroup" class="hidden"><input type="text" id="answer" placeholder="Ex: 4H or 15" autocomplete="off" style="width: 80%;"></div>
+        <div id="choiceInputGroup" class="choice-container"></div>
+        <div id="feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
+    </div>
+
+    <div class="btn-group">
+        <button id="startBtn" class="action-btn start" onclick="archiveAndRestart()">New Session</button>
+        <button id="modeTrigger" class="action-btn mode-trigger" onclick="toggleModeTray()">Mode</button>
+    </div>
+
+    <div id="modeTray" class="hidden" style="margin-top: 10px;">
+        <div class="btn-group" style="margin-top:0;">
+            <button id="btn-N2C" class="action-btn" onclick="setMode('N2C')">Number → Card</button>
+            <button id="btn-C2N" class="action-btn" onclick="setMode('C2N')">Card → Number</button>
+            <button id="btn-C2N_RAND" class="action-btn" style="grid-column: span 2;" onclick="setMode('C2N_RAND')">Random Card/Number</button>
+            <button id="btn-NC" class="action-btn" onclick="setMode('NC')">Next Card</button>
+            <button id="btn-PC" class="action-btn" onclick="setMode('PC')">Prev Card</button>
+            <button id="btn-BA" class="action-btn" style="grid-column: span 2;" onclick="setMode('BA')">Before / After</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    const stack = [null, "QH", "2S", "5D", "8C", "JH", "KS", "10H", "7C", "4D", "AS", "8H", "5C", "2D", "QS", "9H", "6C", "3D", "10S", "7H", "4C", "AD", "JS", "9S", "6H", "3C", "KD", "QD", "10D", "7S", "4H", "AC", "JD", "8S", "5H", "2C", "2H", "QC", "9D", "6S", "3H", "KC", "4S", "AH", "JC", "8D", "5S", "3S", "KH", "10C", "7D", "6D", "9C"];
+    const suitSymbols = { "H": "♥", "D": "♦", "C": "♣", "S": "♠" };
+    
+    let inputMethod = 'choice', aiMode = false, voiceMode = false, currentMode = 'C2N_RAND', currentTarget = null, isDarkMode = false;
+    let stats = { correct: 0, wrong: 0, total: 0 };
+    let heatData = Array(53).fill(0);
+    let sessionHistory = [];
+    let cardStats = {}; 
+    let activeTimerStart = null, totalActiveTime = 0; 
+    let wakeLock = null;
+
+    function getCardDisplayHtml(code) {
+        if (!code) return "";
+        if (!isNaN(code)) return `<div class="number-card">${code}</div>`;
+        let img = code.toUpperCase();
+        if(img.startsWith('10')) img = '0' + img.slice(-1);
+        return `<img src="https://deckofcardsapi.com/static/img/${img}.png" class="card-img">`;
+    }
+
+    function getCardTextHtml(code) {
+        if (!code || isNaN(code) === false) return `<b>${code}</b>`;
+        const val = code.slice(0, -1), suit = code.slice(-1);
+        const color = (suit === 'H' || suit === 'D') ? '#bc4749' : (isDarkMode ? '#e0e0e0' : 'black');
+        return `<span style="color: ${color}">${val}${suitSymbols[suit]}</span>`;
+    }
+
+    function toggleStackView() {
+        const tray = document.getElementById('stackTray');
+        tray.classList.toggle('hidden');
+        if(!tray.classList.contains('hidden')) {
+            const list = document.getElementById('stackList');
+            list.innerHTML = "";
+            for(let i=1; i<=52; i++) {
+                const item = document.createElement('div');
+                item.className = 'stack-item';
+                item.onclick = () => showCardStat(i);
+                item.innerHTML = `<span class="stack-num">${i}</span><span class="stack-val-label">${getCardTextHtml(stack[i])}</span>`;
+                list.appendChild(item);
+            }
+        }
+    }
+
+    function toggleModeTray() { document.getElementById('modeTray').classList.toggle('hidden'); }
+
+    function showCardStat(pos) {
+        const data = cardStats[pos] || {c: 0, w: 0, time: 0};
+        const total = data.c + data.w;
+        const acc = total > 0 ? Math.round((data.c / total) * 100) : 0;
+        const speed = total > 0 ? (data.time / 1000 / total).toFixed(2) : 0;
+        document.getElementById('modalCardTitle').innerHTML = `${pos}: ${getCardTextHtml(stack[pos])}`;
+        document.getElementById('modalStats').innerText = `${data.c} / ${data.w} / ${total}`;
+        document.getElementById('modalAcc').innerText = acc + "%";
+        document.getElementById('modalSpeed').innerText = speed + "s";
+        document.getElementById('cardModal').classList.remove('hidden');
+    }
+
+    function closeModal() { document.getElementById('cardModal').classList.add('hidden'); }
+
+    function saveAll() {
+        const data = { inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, minRange: document.getElementById('minRange').value, maxRange: document.getElementById('maxRange').value, totalActiveTime, cardStats };
+        localStorage.setItem('redfordTrainer_v23', JSON.stringify(data));
+    }
+
+    function loadAll() {
+        const saved = localStorage.getItem('redfordTrainer_v23');
+        if (saved) {
+            const d = JSON.parse(saved);
+            inputMethod = d.inputMethod || 'choice'; aiMode = d.aiMode || false; 
+            voiceMode = d.voiceMode || false;
+            currentMode = d.currentMode || 'C2N_RAND'; stats = d.stats || {correct:0, wrong:0, total:0}; 
+            heatData = d.heatData || Array(53).fill(0); sessionHistory = d.sessionHistory || []; isDarkMode = d.isDarkMode || false;
+            totalActiveTime = d.totalActiveTime || 0; cardStats = d.cardStats || {};
+            document.getElementById('minRange').value = d.minRange || 1; 
+            document.getElementById('maxRange').value = d.maxRange || 52;
+        }
+        document.getElementById('aiBtn').classList.toggle('active', aiMode);
+        document.getElementById('aiBtn').innerText = aiMode ? "AI: ON" : "AI: OFF";
+        document.getElementById('voiceBtn').classList.toggle('active', voiceMode);
+        document.getElementById('voiceBtn').innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
+        document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
+        setInputMethod(inputMethod); 
+        if (isDarkMode) applyTheme();
+        setMode(currentMode, false);
+        updateUI(); generateQuestion();
+    }
+
+    function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); saveAll(); }
+    function applyTheme() {
+        document.body.classList.toggle('dark-theme', isDarkMode);
+        document.getElementById('themeBtn').innerText = isDarkMode ? "☀️" : "🌙";
+        if(currentTarget) renderInputArea();
+        if(!document.getElementById('stackTray').classList.contains('hidden')) toggleStackView();
+    }
+
+    function formatTime(totalSeconds) {
+        const mins = Math.floor(totalSeconds / 60);
+        const secs = totalSeconds % 60;
+        return `${mins}:${secs.toString().padStart(2, '0')}`;
+    }
+
+    function toggleSettings() { document.getElementById('settingsTray').classList.toggle('hidden'); }
+    function toggleHistory() { document.getElementById('historyTray').classList.toggle('hidden'); }
+    function toggleHeatMap() { document.getElementById('heatMap').classList.toggle('hidden'); }
+
+    function setInputMethod(m) { 
+        inputMethod = m; 
+        document.getElementById('modeType').classList.toggle('active', m === 'type'); 
+        document.getElementById('modeChoice').classList.toggle('active', m === 'choice');
+        document.getElementById('typeInputGroup').classList.toggle('hidden', m !== 'type'); 
+        document.getElementById('choiceInputGroup').classList.toggle('hidden', m !== 'choice');
+        if(currentTarget) renderInputArea();
+        saveAll();
+    }
+
+    function toggleAI() {
+        aiMode = !aiMode;
+        const btn = document.getElementById('aiBtn');
+        btn.classList.toggle('active', aiMode); btn.innerText = aiMode ? "AI: ON" : "AI: OFF";
+        saveAll();
+    }
+
+    function toggleVoice() {
+        voiceMode = !voiceMode;
+        const btn = document.getElementById('voiceBtn');
+        btn.classList.toggle('active', voiceMode);
+        btn.innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
+        document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
+        if(voiceMode) {
+            requestWakeLock();
+            initVoiceRecognition();
+            speak("Voice mode activated.");
+        } else {
+            releaseWakeLock();
+            if(recognition) recognition.stop();
+        }
+        saveAll();
+    }
+
+    function archiveAndRestart() {
+        if (stats.total > 0) {
+            const pct = Math.round((stats.correct / stats.total) * 100);
+            const pace = ((totalActiveTime / 1000) / stats.total).toFixed(1);
+            sessionHistory.unshift({ date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), total: stats.total, correct: stats.correct, wrong: stats.wrong, pct: pct, time: formatTime(Math.floor(totalActiveTime / 1000)), speed: pace });
+            if (sessionHistory.length > 20) sessionHistory.pop();
+        }
+        stats = { correct: 0, wrong: 0, total: 0 }; totalActiveTime = 0;
+        updateUI(); generateQuestion(); saveAll();
+    }
+
+    function setMode(m, shouldRestart = true) {
+        currentMode = m;
+        document.querySelectorAll('#modeTray .action-btn').forEach(b => b.classList.remove('selected-mode'));
+        const activeBtn = document.getElementById(`btn-${m}`);
+        if(activeBtn) activeBtn.classList.add('selected-mode');
+        saveAll();
+        if(shouldRestart) archiveAndRestart();
+    }
+
+    function generateQuestion() {
+        const min = parseInt(document.getElementById('minRange').value) || 1, max = parseInt(document.getElementById('maxRange').value) || 52;
+        let pool = [];
+        for (let i = min; i <= max; i++) {
+            pool.push(i);
+            if (aiMode && heatData[i] > 0) { for(let h=0; h < (heatData[i] * 5); h++) pool.push(i); }
+        }
+        const pos = pool[Math.floor(Math.random() * pool.length)], card = stack[pos], displayEl = document.getElementById('display');
+        let modeToUse = (currentMode === 'C2N_RAND') ? (Math.random() > 0.5 ? 'N2C' : 'C2N') : currentMode;
+        switch(modeToUse) {
+            case 'N2C': displayEl.innerHTML = getCardDisplayHtml(pos); currentTarget = { ans: card, pos: pos, type: 'card', speak: pos }; break;
+            case 'C2N': displayEl.innerHTML = getCardDisplayHtml(card); currentTarget = { ans: pos.toString(), pos: pos, type: 'num', speak: getSpeakableCardName(card) }; break;
+            case 'NC': displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">AFTER:</div>${getCardDisplayHtml(card)}</div>`; currentTarget = { ans: stack[(pos % 52) + 1], pos: pos, type: 'card', speak: "After " + getSpeakableCardName(card) }; break;
+            case 'PC': displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">BEFORE:</div>${getCardDisplayHtml(card)}</div>`; currentTarget = { ans: stack[pos === 1 ? 52 : pos - 1], pos: pos, type: 'card', speak: "Before " + getSpeakableCardName(card) }; break;
+            case 'BA': 
+                const isBefore = Math.random() > 0.5;
+                displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">${isBefore ? 'BEFORE' : 'AFTER'}:</div>${getCardDisplayHtml(card)}</div>`;
+                currentTarget = { ans: stack[isBefore ? (pos === 1 ? 52 : pos - 1) : (pos === 52 ? 1 : pos + 1)], pos: pos, type: 'card', speak: (isBefore ? "Before " : "After ") + getSpeakableCardName(card) };
+                break;
+        }
+        if(voiceMode) speak(currentTarget.speak.toString());
+        activeTimerStart = Date.now();
+        renderInputArea();
+    }
+
+    function renderInputArea() {
+        document.getElementById('feedback').innerText = "";
+        if (inputMethod === 'type') { const inp = document.getElementById('answer'); inp.value = ""; inp.focus(); }
+        else {
+            const container = document.getElementById('choiceInputGroup');
+            container.innerHTML = "";
+            let choices = [currentTarget.ans];
+            while(choices.length < 3) {
+                let decoy = currentTarget.type === 'num' ? (Math.floor(Math.random() * 52) + 1).toString() : stack[Math.floor(Math.random() * 52) + 1];
+                if(decoy && !choices.includes(decoy)) choices.push(decoy);
+            }
+            choices.sort(() => Math.random() - 0.5).forEach(c => {
+                const btn = document.createElement('button'); btn.className = 'choice-btn'; btn.innerHTML = getCardTextHtml(c);
+                btn.onclick = () => validate(c); container.appendChild(btn);
+            });
+        }
+    }
+
+    function validate(userAns) {
+        if (!currentTarget) return;
+        let timeSpent = 0;
+        if (activeTimerStart) { timeSpent = (Date.now() - activeTimerStart); totalActiveTime += timeSpent; activeTimerStart = null; }
+        if (!cardStats[currentTarget.pos]) cardStats[currentTarget.pos] = {c: 0, w: 0, time: 0};
+        cardStats[currentTarget.pos].time += timeSpent;
+        const correctAns = currentTarget.ans.toString().toUpperCase(), normalizedUser = userAns.toString().trim().toUpperCase(), feedback = document.getElementById('feedback');
+        if (normalizedUser === correctAns) {
+            stats.correct++; feedback.innerText = "CORRECT!"; feedback.style.color = "var(--correct-color)";
+            heatData[currentTarget.pos] = Math.max(heatData[currentTarget.pos] - 1, -5); cardStats[currentTarget.pos].c++;
+            if(voiceMode) speak("That is correct.");
+        } else {
+            stats.wrong++; feedback.innerText = `Wrong! Correct: ${correctAns}`; feedback.style.color = "var(--wrong-color)";
+            heatData[currentTarget.pos] = Math.max(heatData[currentTarget.pos] + 1, 0); cardStats[currentTarget.pos].w++;
+            if(voiceMode) { let cardFull = getSpeakableCardName(correctAns); speak(`Wrong. The answer is ${cardFull}`); }
+        }
+        stats.total = stats.correct + stats.wrong; updateUI(); saveAll();
+        setTimeout(generateQuestion, normalizedUser === correctAns ? 1200 : 3500);
+    }
+
+    function updateUI() { document.getElementById('score-correct').innerText = stats.correct; document.getElementById('score-wrong').innerText = stats.wrong; document.getElementById('score-total').innerText = stats.total; renderHistory(); renderHeatMap(); }
+    function renderHistory() {
+        const body = document.getElementById('historyBody'); body.innerHTML = "";
+        let totalC = 0, totalT = 0, maxPct = 0, minSpeed = 999;
+        sessionHistory.forEach(s => { totalC += s.correct; totalT += s.total; if(s.pct > maxPct) maxPct = s.pct; if(parseFloat(s.speed) < minSpeed) minSpeed = parseFloat(s.speed); });
+        sessionHistory.forEach((s) => {
+            const isBestAcc = s.pct === maxPct && maxPct > 0, isBestSpeed = parseFloat(s.speed) === minSpeed && minSpeed < 999;
+            body.innerHTML += `<tr class="${isBestAcc ? 'best-acc' : ''}"><td>${s.date}${isBestAcc ? '<span class="badge">⭐</span>' : ''}${isBestSpeed ? '<span class="badge">⚡</span>' : ''}</td><td>${s.correct}/${s.wrong}</td><td>${s.total}</td><td>${s.pct}%</td><td>${s.time}</td><td class="${parseFloat(s.speed) < 2.0 ? 'speed-hit' : ''}">${s.speed}s</td></tr>`;
+        });
+        document.getElementById('lifetime-pct').innerText = totalT > 0 ? Math.round((totalC / totalT) * 100) + "%" : "0%";
+    }
+    function renderHeatMap() {
+        const container = document.getElementById('heatMap'); container.innerHTML = "";
+        for (let i = 1; i <= 52; i++) {
+            const cell = document.createElement('div'); cell.className = 'heat-cell'; cell.innerText = i; let val = heatData[i];
+            if (val > 0) { cell.style.backgroundColor = `rgb(${Math.max(255 - (val * 40), 100)}, 0, 0)`; cell.style.color = "white"; }
+            else if (val < 0) { cell.style.backgroundColor = "#4a90e2"; cell.style.color = "white"; }
+            else cell.style.backgroundColor = "var(--heat-base)";
+            container.appendChild(cell);
+        }
+    }
+    function clearHistory() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
+    document.getElementById('answer').addEventListener('keypress', (e) => { if (e.key === 'Enter') validate(e.target.value); });
+
+    /* -------------------------------------------------------------------
+       VOICE ENGINE SCRIPT (TTS, STT, NORMALIZE, WAKE LOCK)
+    ------------------------------------------------------------------- */
+    const voiceNames = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
+    let isSpeaking = false, audioContext;
+
+    function resumeAudio() {
+        try {
+            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioContext.state === 'suspended') audioContext.resume();
+            const utterance = new SpeechSynthesisUtterance("");
+            window.speechSynthesis.speak(utterance);
+        } catch (e) { console.log("Audio Resume Error:", e); }
+    }
+
+    function getSpeakableCardName(code) {
+        if(!isNaN(code)) return code;
+        let val = code.slice(0, -1), suit = code.slice(-1);
+        if(val === "10") val = "Ten";
+        return (voiceNames[val] || val) + " of " + voiceNames[suit];
+    }
+
+    function speak(text) {
+        if(!voiceMode) return;
+        resumeAudio();
+        setTimeout(() => {
+            let msg = new SpeechSynthesisUtterance(text);
+            msg.rate = 1.0; msg.volume = 1.0;
+            msg.onstart = () => { isSpeaking = true; updateMicIcon(false); };
+            msg.onend = () => { isSpeaking = false; updateMicIcon(true); };
+            window.speechSynthesis.speak(msg);
+        }, 250);
+    }
+
+    function updateMicIcon(isListening) {
+        const micBtn = document.getElementById('micStatus');
+        if(!micBtn) return;
+        if(isListening && voiceMode) micBtn.classList.add('listening');
+        else micBtn.classList.remove('listening');
+    }
+
+    let recognition;
+    function initVoiceRecognition() {
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition || window.mozSpeechRecognition || window.msSpeechRecognition;
+        if(!SpeechRecognition) { alert("This device's internal browser does not support Speech Recognition."); return; }
+        if(recognition) recognition.stop();
+        recognition = new SpeechRecognition();
+        recognition.continuous = true; recognition.interimResults = false; recognition.lang = 'en-US';
+        recognition.onresult = (event) => {
+            if (isSpeaking) return; 
+            let result = event.results[event.results.length - 1][0].transcript.toLowerCase();
+            processVoiceInput(result);
+        };
+        recognition.onerror = (e) => { 
+            console.log("Mic Error:", e.error);
+            if(voiceMode && (e.error === 'no-speech' || e.error === 'audio-capture')) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 500);
+        };
+        recognition.onend = () => { if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); };
+        try { recognition.start(); updateMicIcon(true); } catch(e) { console.log("Mic Initialization Failed:", e); }
+    }
+
+    function processVoiceInput(text) {
+        text = text.replace('clovers', 'clubs').replace('diamond', 'diamonds').replace('heart', 'hearts').replace('spade', 'spades');
+        text = text.replace('of ', ' '); 
+        let suits = {"hearts":"H", "diamonds":"D", "clubs":"C", "spades":"S"}, faces = {"ace":"A", "king":"K", "queen":"Q", "jack":"J", "ten":"10"};
+        let foundSuit = null, foundVal = null;
+        for(let s in suits) { if(text.includes(s)) foundSuit = suits[s]; }
+        for(let f in faces) { if(text.includes(f)) foundVal = faces[f]; }
+        let numMatch = text.match(/[2-9]/);
+        if(numMatch && !foundVal) foundVal = numMatch[0];
+        if(foundSuit && foundVal) validate(foundVal + foundSuit); 
+        else { let digits = text.match(/\d+/); if(digits) validate(digits[0]); }
+    }
+
+    async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {} }
+    function releaseWakeLock() { if(wakeLock) { wakeLock.release(); wakeLock = null; } }
+    loadAll();
+</script>
+</body>
+</html>
