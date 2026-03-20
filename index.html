@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="manifest" href="manifest.json">
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('sw.js');
-  }
-</script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stack Trainer Pro</title>
+    <link rel="manifest" href="manifest.json">
+    <script>
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('sw.js');
+      }
+    </script>
     <style>
         :root {
             --bg-color: #3e362e;
@@ -655,7 +655,11 @@
         return false;
     }
 
-    async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {} }
+    async function requestWakeLock() { 
+        try { 
+            if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); 
+        } catch (err) {} 
+    }
     function releaseWakeLock() { if(wakeLock) { wakeLock.release(); wakeLock = null; } }
     loadAll();
 </script>
