@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use: Stack Trainer Pro</title>
+    <style>
+        :root {
+            --bg-color: #3e362e;
+            --container-bg: #ede0d4;
+            --text-color: #432818;
+            --accent: #a98467;
+            --correct: #6a994e;
+        }
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: #121212;
+                --container-bg: #1e1e1e;
+                --text-color: #e0e0e0;
+            }
+        }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            line-height: 1.6;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            justify-content: center;
+        }
+        .guide-container {
+            max-width: 600px;
+            background-color: var(--container-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 10px; }
+        h2 { font-size: 1.2rem; margin-top: 25px; display: flex; align-items: center; gap: 10px; }
+        .step { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
+        code { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
+        .tip { font-style: italic; color: var(--correct); font-weight: bold; }
+        .back-btn { display: inline-block; margin-top: 20px; color: var(--accent); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+<div class="guide-container">
+    <h1>Quick Start Guide</h1>
+    <p>Master the <b>Redford Stack</b> using hands-free voice commands and AI-driven drills.</p>
+
+    <div class="step">
+        <h2>📲 Step 1: Install as an App</h2>
+        <p>This tool works best when saved to your home screen. This enables full-screen mode and keeps the microphone active.</p>
+        <ul>
+            <li><b>Android (Chrome):</b> Tap <code>⋮</code> then <b>"Install App"</b>.</li>
+            <li><b>iPhone (Safari):</b> Tap the <b>Share</b> icon then <b>"Add to Home Screen"</b>.</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h2>🎤 Step 2: Voice Commands</h2>
+        <p>The AI is trained to recognize specific patterns. For the best results, speak clearly:</p>
+        <ul>
+            <li><b>For Cards:</b> Say <code>"Five of Clubs"</code> or <code>"Jack of Hearts"</code>.</li>
+            <li><b>For Numbers:</b> Say <code>"Number 14"</code> or <code>"Number 5"</code>.</li>
+        </ul>
+        <p class="tip">Pro Tip: If the app misses a '5' or '7', try saying "Number 5" instead of just "Five".</p>
+    </div>
+
+    <div class="step">
+        <h2>🔥 Step 3: Heat Map & AI</h2>
+        <p>Tap the <b>Fire Icon</b> to see your progress. Red cards are your "weak spots."</p>
+        <ul>
+            <li>Turn <b>AI: ON</b> to have the app automatically repeat your weakest cards more often until you master them.</li>
+        </ul>
+    </div>
+
+    <div class="step">
+        <h2>🏆 Step 4: Tracking Speed</h2>
+        <p>Check the <b>Stats</b> tab. Aim for a "Pace" of <b>under 2.0s</b>. When you hit that consistently, you are ready to perform the stack live!</p>
+    </div>
+
+    <a href="index.html" class="back-btn">← Back to Trainer</a>
+</div>
+
+</body>
+</html>
