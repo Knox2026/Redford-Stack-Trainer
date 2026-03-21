@@ -37,6 +37,8 @@
             --toggle-active-text: #432818;
             --num-bg: #d5bdaf;
             --neon-mic: #39ff14;
+            --mic-glow-text-color: #2a6f2a; /* Light Mode: Bold Dark Green */
+            --mic-glow-text-shadow: none;
         }
 
         body.dark-theme {
@@ -55,6 +57,8 @@
             --toggle-active-bg: #f5ebe0;
             --toggle-active-text: #121212;
             --num-bg: #404040;
+            --mic-glow-text-color: #39ff14; /* Dark Mode: Neon Green */
+            --mic-glow-text-shadow: 0 0 5px #39ff14;
         }
 
         body {
@@ -94,12 +98,10 @@
         .stack-num { font-weight: 800; font-size: 0.8em; color: var(--text-color); background: var(--num-bg); padding: 2px 0; width: 100%; }
         .stack-val-label { padding: 4px 0; font-weight: bold; font-size: 1.1em; }
 
-        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 2rem; cursor: pointer; font-weight: 900; color: var(--btn-color); line-height: 1; }
 
-        /* HELP MODAL STYLES */
         .help-section { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--btn-color); }
         .help-alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--wrong-color); }
         .help-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
@@ -107,7 +109,7 @@
         .help-section h2 { font-size: 1.1rem; margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
         .help-section ul { padding-left: 20px; margin-bottom: 0; }
         .help-section li { margin-bottom: 5px; font-size: 0.9rem; }
-        .mic-glow-text { color: var(--neon-mic); font-weight: bold; text-shadow: 0 0 5px var(--neon-mic); }
+        .mic-glow-text { color: var(--mic-glow-text-color); font-weight: bold; text-shadow: var(--mic-glow-text-shadow); transition: color 0.3s ease, text-shadow 0.3s ease; }
 
         .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
         .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
@@ -208,7 +210,7 @@
         <div class="help-section">
             <h2>⚠️ Troubleshooting & Audio Fixes</h2>
             <ul>
-                <li><b>Browser Permissions:</b> Ensure browser has <b>Microphone Access</b> in System Settings.</li>
+                <li><b>Browser Permissions:</b> Ensure browser has <b>Mic Access</b> in System Settings.</li>
                 <li><b>Spatial Audio:</b> For reliability, <b>Turn OFF Spatial Audio</b> in phone and Bluetooth settings.</li>
                 <li><b>Battery Saver:</b> Disable mode; it can cause static or recognition errors.</li>
             </ul>
@@ -304,7 +306,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.3</div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.4</div>
 </div>
 
 <script>
