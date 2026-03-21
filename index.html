@@ -81,7 +81,7 @@
         button { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: none; outline: none; display: flex; align-items: center; justify-content: center; }
         button:active { transform: scale(0.95); }
 
-        .theme-toggle-btn, .stack-view-btn, .heat-view-btn, .voice-status-btn, .settings-toggle-btn, .history-toggle-btn { 
+        .theme-toggle-btn, .stack-view-btn, .heat-view-btn, .voice-status-btn, .settings-toggle-btn, .history-toggle-btn, .help-toggle-btn { 
             background: var(--btn-color); color: var(--btn-text); width: 42px; height: 38px; border-radius: 8px; font-size: 1.2rem; 
         }
 
@@ -89,23 +89,22 @@
         
         #settingsTray, #historyTray, #stackTray, #modeTray { background: var(--tray-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); }
 
-        .stack-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(45px, 1fr)); gap: 4px; padding: 5px; font-size: 0.75em; }
-        .stack-item { background: var(--card-bg); border-radius: 6px; border: 1px solid var(--border-color); display: flex; flex-direction: column; overflow: hidden; cursor: pointer; }
-        .stack-num { font-weight: 800; font-size: 0.8em; color: var(--text-color); background: var(--num-bg); padding: 2px 0; width: 100%; }
-        .stack-val-label { padding: 4px 0; font-weight: bold; font-size: 1.1em; }
-
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
-        .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 300px; width: 90%; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; }
+        .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 450px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
-        .stat-row { display: flex; justify-content: space-between; margin: 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 500; }
 
-        /* Restored History Table Styling */
+        /* Help Modal Specifics */
+        .help-section { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border-color); }
+        .help-section h3 { margin-top: 0; color: var(--ai-color); font-size: 1rem; text-transform: uppercase; letter-spacing: 1px; }
+        .help-alert { background: rgba(188, 71, 73, 0.1); padding: 10px; border-radius: 8px; border-left: 4px solid var(--wrong-color); margin: 10px 0; font-size: 0.85rem; }
+        .mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.8rem; }
+        .mode-cell { background: rgba(0,0,0,0.05); padding: 6px; border-radius: 4px; }
+
         .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
         .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
         .history-table td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); }
         .best-acc { background-color: rgba(255, 235, 59, 0.1) !important; font-weight: bold; } 
         .speed-hit { color: var(--correct-color); font-weight: bold; }
-        .badge { font-size: 1.2em; margin-left: 5px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4)); vertical-align: middle; }
 
         .scoreboard { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 12px; margin-bottom: 15px; font-weight: bold; font-size: 1.1em; }
         .stat-val { margin-left: 4px; }
@@ -113,16 +112,11 @@
         .red { color: var(--wrong-color); }
 
         .card-display { height: 280px; display: flex; align-items: center; justify-content: center; margin: 10px 0; border-radius: 12px; }
-        .number-card {
-            height: 200px; aspect-ratio: 2.5 / 3.5; background: white; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center; font-size: 100px; color: #1a1a1a;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #ccc; font-weight: 700;
-        }
+        .number-card { height: 200px; aspect-ratio: 2.5 / 3.5; background: white; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 100px; color: #1a1a1a; box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #ccc; font-weight: 700; }
         .card-img { height: 200px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); object-fit: contain; }
-        .prompt-label { font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; background: rgba(0,0,0,0.08); padding: 4px 15px; border-radius: 20px; text-transform: uppercase; }
 
         .input-area { min-height: 90px; margin: 10px 0; }
-        input[type="text"], input[type="number"] { padding: 10px; border-radius: 8px; border: 1px solid var(--btn-color); background: var(--card-bg); color: var(--text-color); font-size: 1rem; }
+        input[type="number"] { padding: 10px; border-radius: 8px; border: 1px solid var(--btn-color); background: var(--card-bg); color: var(--text-color); width: 45px; }
 
         .toggle-group { display: flex; gap: 8px; margin-bottom: 15px; align-items: center; justify-content: center; }
         .toggle-sub-group { display: flex; flex: 2; gap: 0; background: rgba(0,0,0,0.25); border-radius: 8px; padding: 4px; }
@@ -156,11 +150,46 @@
 </head>
 <body>
 
+<div id="helpModal" class="modal-overlay hidden">
+    <div class="modal-content">
+        <span class="modal-close" onclick="toggleHelpModal()">×</span>
+        <h2 style="margin-top:0; color:var(--btn-color);">User Guide</h2>
+        
+        <div class="help-section">
+            <h3>🎤 Voice Commands</h3>
+            <p style="font-size:0.85rem;">Say clearly: <b>"Five of Clubs"</b> or <b>"Number 14"</b>. Green glow means the app is listening.</p>
+        </div>
+
+        <div class="help-section">
+            <h3>🧠 Training Modes</h3>
+            <div class="mode-grid">
+                <div class="mode-cell"><b>N2C:</b> Number to Card</div>
+                <div class="mode-cell"><b>C2N:</b> Card to Number</div>
+                <div class="mode-cell"><b>Next:</b> Card Follows</div>
+                <div class="mode-cell"><b>Prev:</b> Card Precedes</div>
+            </div>
+        </div>
+
+        <div class="help-alert">
+            <b>🎧 Bluetooth Fix:</b> If car audio acts like a "Call," go to Bluetooth Settings and toggle <b>OFF "Phone Calls"</b> but keep <b>"Media" ON</b>.
+        </div>
+
+        <div class="help-section">
+            <h3>⚠️ Troubleshooting</h3>
+            <p style="font-size:0.8rem; line-height:1.4;">
+                • Ensure <b>Mic Access</b> is granted in Browser Settings.<br>
+                • Disable <b>Spatial Audio</b> for all devices.<br>
+                • Disable <b>Battery Saver</b> for best voice recognition.
+            </p>
+        </div>
+    </div>
+</div>
+
 <div id="cardModal" class="modal-overlay hidden">
     <div class="modal-content">
         <span class="modal-close" onclick="closeModal()">×</span>
         <div id="modalCardTitle" style="font-size: 2rem; margin-bottom: 15px; font-weight: bold;"></div>
-        <div class="stat-row"><span>Stats (✔/✖/Total):</span> <span id="modalStats">0/0/0</span></div>
+        <div class="stat-row"><span>Stats:</span> <span id="modalStats">0/0/0</span></div>
         <div class="stat-row"><span>Accuracy:</span> <span id="modalAcc">0%</span></div>
         <div class="stat-row"><span>Avg Speed:</span> <span id="modalSpeed">0s</span></div>
     </div>
@@ -178,10 +207,9 @@
             </svg>
         </div>
         <div class="header-right-group">
+            <button class="help-toggle-btn" onclick="toggleHelpModal()">❓</button>
             <button class="settings-toggle-btn" onclick="toggleSettings()">
-                <svg viewBox="0 0 24 24">
-                    <path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/>
-                </svg>
+                <svg viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98 0-.34-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98 0 .33.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
             </button>
             <button class="history-toggle-btn" onclick="toggleHistory()">🏆</button>
         </div>
@@ -199,19 +227,16 @@
             <button id="aiBtn" class="separate-btn" onclick="toggleAI()">AI: OFF</button>
             <button id="voiceBtn" class="separate-btn" onclick="toggleVoice()">Voice: OFF</button>
         </div>
-        <div style="font-size: 0.9em; display: flex; align-items: center; justify-content: center; gap: 10px;">
-            Range: <input type="number" id="minRange" value="1" min="1" max="52" style="width: 45px;" onchange="saveAll()"> 
-            to <input type="number" id="maxRange" value="52" min="1" max="52" style="width: 45px;" onchange="saveAll()">
-            <button onclick="clearHistory()" style="background: var(--wrong-color); color: white; padding: 6px 10px; border-radius: 6px; font-size: 0.8em;">Wipe Data</button>
+        <div style="font-size: 0.9em; display:flex; justify-content:center; gap:10px;">
+            Range: <input type="number" id="minRange" value="1" onchange="saveAll()"> 
+            to <input type="number" id="maxRange" value="52" onchange="saveAll()">
+            <button onclick="clearHistory()" style="background:var(--wrong-color); color:white; padding:6px 10px; border-radius:6px; font-size:0.8em;">Wipe Data</button>
         </div>
     </div>
 
     <div id="historyTray" class="hidden">
-        <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Lifetime Accuracy: <span id="lifetime-pct">0%</span></div>
         <table class="history-table">
-            <thead>
-                <tr><th>Session</th><th>✔/✖</th><th>Total</th><th>Acc %</th><th>Time</th><th>Pace</th></tr>
-            </thead>
+            <thead><tr><th>Session</th><th>✔/✖</th><th>Acc %</th><th>Pace</th></tr></thead>
             <tbody id="historyBody"></tbody>
         </table>
     </div>
@@ -223,356 +248,178 @@
     </div>
 
     <div id="display" class="card-display">Ready?</div>
-    <div class="input-area">
-        <div id="typeInputGroup" class="hidden"><input type="text" id="answer" placeholder="Ex: 4H or 15" autocomplete="off" style="width: 80%;"></div>
-        <div id="choiceInputGroup" class="choice-container"></div>
-        <div id="feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
-    </div>
+    <div class="input-area"><div id="feedback" style="font-weight:bold;"></div><div id="choiceInputGroup" class="choice-container"></div></div>
 
     <div class="btn-group">
         <button id="startBtn" class="action-btn start" onclick="archiveAndRestart()">New Session</button>
         <button id="modeTrigger" class="action-btn mode-trigger" onclick="toggleModeTray()">Mode</button>
     </div>
 
-    <div id="modeTray" class="hidden" style="margin-top: 10px;">
+    <div id="modeTray" class="hidden" style="margin-top:10px;">
         <div class="btn-group" style="margin-top:0;">
             <button id="btn-N2C" class="action-btn" onclick="setMode('N2C')">Number → Card</button>
             <button id="btn-C2N" class="action-btn" onclick="setMode('C2N')">Card → Number</button>
-            <button id="btn-C2N_RAND" class="action-btn" style="grid-column: span 2;" onclick="setMode('C2N_RAND')">Random Card/Number</button>
-            <button id="btn-NC" class="action-btn" onclick="setMode('NC')">Next Card</button>
-            <button id="btn-PC" class="action-btn" onclick="setMode('PC')">Prev Card</button>
-            <button id="btn-BA" class="action-btn" style="grid-column: span 2;" onclick="setMode('BA')">Before / After</button>
+            <button id="btn-C2N_RAND" class="action-btn" style="grid-column:span 2;" onclick="setMode('C2N_RAND')">Random</button>
+            <button id="btn-NC" class="action-btn" onclick="setMode('NC')">Next</button>
+            <button id="btn-PC" class="action-btn" onclick="setMode('PC')">Prev</button>
+            <button id="btn-BA" class="action-btn" style="grid-column:span 2;" onclick="setMode('BA')">Before / After</button>
         </div>
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.3</div>
+    <div style="font-size:0.6rem; opacity:0.3; margin-top:15px;">Version 1.4</div>
 </div>
 
 <script>
     const stack = [null, "QH", "2S", "5D", "8C", "JH", "KS", "10H", "7C", "4D", "AS", "8H", "5C", "2D", "QS", "9H", "6C", "3D", "10S", "7H", "4C", "AD", "JS", "9S", "6H", "3C", "KD", "QD", "10D", "7S", "4H", "AC", "JD", "8S", "5H", "2C", "2H", "QC", "9D", "6S", "3H", "KC", "4S", "AH", "JC", "8D", "5S", "3S", "KH", "10C", "7D", "6D", "9C"];
     const suitSymbols = { "H": "♥", "D": "♦", "C": "♣", "S": "♠" };
-    
     let inputMethod = 'choice', aiMode = false, voiceMode = false, currentMode = 'C2N_RAND', currentTarget = null, isDarkMode = false;
-    let stats = { correct: 0, wrong: 0, total: 0 };
-    let heatData = Array(53).fill(0);
-    let sessionHistory = [];
-    let cardStats = {}; 
-    let activeTimerStart = null, totalActiveTime = 0, wakeLock = null;
+    let stats = { correct: 0, wrong: 0, total: 0 }, heatData = Array(53).fill(0), sessionHistory = [], cardStats = {}, totalActiveTime = 0, activeTimerStart = null, wakeLock = null;
 
-    function getCardDisplayHtml(code) {
-        if (!code) return "";
-        if (!isNaN(code)) return `<div class="number-card">${code}</div>`;
-        let img = code.toUpperCase();
-        if(img.startsWith('10')) img = '0' + img.slice(-1);
-        return `<img src="https://deckofcardsapi.com/static/img/${img}.png" class="card-img">`;
-    }
-
-    function getCardTextHtml(code) {
-        if (!code || isNaN(code) === false) return `<b>${code}</b>`;
-        const val = code.slice(0, -1), suit = code.slice(-1);
-        const color = (suit === 'H' || suit === 'D') ? '#bc4749' : (isDarkMode ? '#e0e0e0' : 'black');
-        return `<span style="color: ${color}">${val}${suitSymbols[suit]}</span>`;
-    }
-
+    function toggleHelpModal() { document.getElementById('helpModal').classList.toggle('hidden'); }
+    function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); saveAll(); }
+    function applyTheme() { document.body.classList.toggle('dark-theme', isDarkMode); document.getElementById('themeBtn').innerText = isDarkMode ? "☀️" : "🌙"; }
+    function toggleSettings() { document.getElementById('settingsTray').classList.toggle('hidden'); }
+    function toggleHistory() { document.getElementById('historyTray').classList.toggle('hidden'); }
+    function toggleHeatMap() { document.getElementById('heatMap').classList.toggle('hidden'); }
     function toggleStackView() {
-        const tray = document.getElementById('stackTray');
-        tray.classList.toggle('hidden');
+        const tray = document.getElementById('stackTray'); tray.classList.toggle('hidden');
         if(!tray.classList.contains('hidden')) {
-            const list = document.getElementById('stackList');
-            list.innerHTML = "";
+            const list = document.getElementById('stackList'); list.innerHTML = "";
             for(let i=1; i<=52; i++) {
-                const item = document.createElement('div');
-                item.className = 'stack-item';
-                item.onclick = () => showCardStat(i);
-                item.innerHTML = `<span class="stack-num">${i}</span><span class="stack-val-label">${getCardTextHtml(stack[i])}</span>`;
+                const item = document.createElement('div'); item.className = 'stack-item'; item.onclick = () => showCardStat(i);
+                item.innerHTML = `<span class="stack-num" style="background:var(--num-bg); display:block;">${i}</span><span style="font-size:1.1em; font-weight:bold; padding:4px 0;">${getCardTextHtml(stack[i])}</span>`;
                 list.appendChild(item);
             }
         }
     }
 
-    function toggleModeTray() { document.getElementById('modeTray').classList.toggle('hidden'); }
     function showCardStat(pos) {
-        const data = cardStats[pos] || {c: 0, w: 0, time: 0};
-        const total = data.c + data.w;
-        const acc = total > 0 ? Math.round((data.c / total) * 100) : 0;
-        const speed = total > 0 ? (data.time / 1000 / total).toFixed(2) : 0;
+        const d = cardStats[pos] || {c: 0, w: 0, time: 0}; const tot = d.c + d.w;
         document.getElementById('modalCardTitle').innerHTML = `${pos}: ${getCardTextHtml(stack[pos])}`;
-        document.getElementById('modalStats').innerText = `${data.c} / ${data.w} / ${total}`;
-        document.getElementById('modalAcc').innerText = acc + "%";
-        document.getElementById('modalSpeed').innerText = speed + "s";
+        document.getElementById('modalStats').innerText = `${d.c}/${d.w}/${tot}`;
+        document.getElementById('modalAcc').innerText = tot > 0 ? Math.round((d.c/tot)*100)+"%" : "0%";
+        document.getElementById('modalSpeed').innerText = tot > 0 ? (d.time/1000/tot).toFixed(2)+"s" : "0s";
         document.getElementById('cardModal').classList.remove('hidden');
     }
-
     function closeModal() { document.getElementById('cardModal').classList.add('hidden'); }
-    function saveAll() {
-        const data = { inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, minRange: document.getElementById('minRange').value, maxRange: document.getElementById('maxRange').value, totalActiveTime, cardStats };
-        localStorage.setItem('redfordTrainer_v23', JSON.stringify(data));
+    function toggleModeTray() { document.getElementById('modeTray').classList.toggle('hidden'); }
+
+    function getCardDisplayHtml(code) {
+        if (!isNaN(code)) return `<div class="number-card">${code}</div>`;
+        let img = code.toUpperCase(); if(img.startsWith('10')) img = '0' + img.slice(-1);
+        return `<img src="https://deckofcardsapi.com/static/img/${img}.png" class="card-img">`;
     }
-
-    function loadAll() {
-        const saved = localStorage.getItem('redfordTrainer_v23');
-        if (saved) {
-            const d = JSON.parse(saved);
-            inputMethod = d.inputMethod || 'choice'; aiMode = d.aiMode || false; 
-            voiceMode = d.voiceMode || false;
-            currentMode = d.currentMode || 'C2N_RAND'; stats = d.stats || {correct:0, wrong:0, total:0}; 
-            heatData = d.heatData || Array(53).fill(0); sessionHistory = d.sessionHistory || []; isDarkMode = d.isDarkMode || false;
-            totalActiveTime = d.totalActiveTime || 0; cardStats = d.cardStats || {};
-            document.getElementById('minRange').value = d.minRange || 1; 
-            document.getElementById('maxRange').value = d.maxRange || 52;
-        }
-        document.getElementById('aiBtn').classList.toggle('active', aiMode);
-        document.getElementById('aiBtn').innerText = aiMode ? "AI: ON" : "AI: OFF";
-        document.getElementById('voiceBtn').classList.toggle('active', voiceMode);
-        document.getElementById('voiceBtn').innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
-        document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
-        setInputMethod(inputMethod); 
-        if (isDarkMode) applyTheme();
-        setMode(currentMode, false);
-        updateUI(); generateQuestion();
-    }
-
-    function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); saveAll(); }
-    function applyTheme() {
-        document.body.classList.toggle('dark-theme', isDarkMode);
-        document.getElementById('themeBtn').innerText = isDarkMode ? "☀️" : "🌙";
-        if(currentTarget) renderInputArea();
-        if(!document.getElementById('stackTray').classList.contains('hidden')) toggleStackView();
-    }
-
-    function formatTime(totalSeconds) {
-        const mins = Math.floor(totalSeconds / 60);
-        const secs = totalSeconds % 60;
-        return `${mins}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    function toggleSettings() { document.getElementById('settingsTray').classList.toggle('hidden'); }
-    function toggleHistory() { document.getElementById('historyTray').classList.toggle('hidden'); }
-    function toggleHeatMap() { document.getElementById('heatMap').classList.toggle('hidden'); }
-
-    function setInputMethod(m) { 
-        inputMethod = m; 
-        document.getElementById('modeType').classList.toggle('active', m === 'type'); 
-        document.getElementById('modeChoice').classList.toggle('active', m === 'choice');
-        document.getElementById('typeInputGroup').classList.toggle('hidden', m !== 'type'); 
-        document.getElementById('choiceInputGroup').classList.toggle('hidden', m !== 'choice');
-        if(currentTarget) renderInputArea();
-        saveAll();
-    }
-
-    function toggleAI() {
-        aiMode = !aiMode;
-        const btn = document.getElementById('aiBtn');
-        btn.classList.toggle('active', aiMode); btn.innerText = aiMode ? "AI: ON" : "AI: OFF";
-        saveAll();
-    }
-
-    function toggleVoice() {
-        voiceMode = !voiceMode;
-        const btn = document.getElementById('voiceBtn');
-        btn.classList.toggle('active', voiceMode);
-        btn.innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
-        document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
-        if(voiceMode) { requestWakeLock(); initVoiceRecognition(); speak("Voice mode activated."); } 
-        else { releaseWakeLock(); if(recognition) recognition.stop(); }
-        saveAll();
-    }
-
-    function archiveAndRestart() {
-        if (stats.total > 0) {
-            const pct = Math.round((stats.correct / stats.total) * 100);
-            const pace = ((totalActiveTime / 1000) / stats.total).toFixed(1);
-            sessionHistory.unshift({ date: new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}), total: stats.total, correct: stats.correct, wrong: stats.wrong, pct: pct, time: formatTime(Math.floor(totalActiveTime / 1000)), speed: pace });
-            if (sessionHistory.length > 20) sessionHistory.pop();
-        }
-        stats = { correct: 0, wrong: 0, total: 0 }; totalActiveTime = 0;
-        updateUI(); generateQuestion(); saveAll();
-    }
-
-    function setMode(m, shouldRestart = true) {
-        currentMode = m;
-        document.querySelectorAll('#modeTray .action-btn').forEach(b => b.classList.remove('selected-mode'));
-        const activeBtn = document.getElementById(`btn-${m}`);
-        if(activeBtn) activeBtn.classList.add('selected-mode');
-        saveAll();
-        if(shouldRestart) archiveAndRestart();
+    function getCardTextHtml(code) {
+        if (!code || !isNaN(code)) return `<b>${code}</b>`;
+        const v = code.slice(0, -1), s = code.slice(-1);
+        return `<span style="color: ${(s==='H'||s==='D') ? '#bc4749' : (isDarkMode?'#e0e0e0':'black')}">${v}${suitSymbols[s]}</span>`;
     }
 
     function generateQuestion() {
-        const min = parseInt(document.getElementById('minRange').value) || 1, max = parseInt(document.getElementById('maxRange').value) || 52;
-        let pool = [];
-        for (let i = min; i <= max; i++) {
-            pool.push(i);
-            if (aiMode && heatData[i] > 0) { for(let h=0; h < (heatData[i] * 5); h++) pool.push(i); }
-        }
-        const pos = pool[Math.floor(Math.random() * pool.length)], card = stack[pos], displayEl = document.getElementById('display');
-        let modeToUse = (currentMode === 'C2N_RAND') ? (Math.random() > 0.5 ? 'N2C' : 'C2N') : currentMode;
-        switch(modeToUse) {
-            case 'N2C': displayEl.innerHTML = getCardDisplayHtml(pos); currentTarget = { ans: card, pos: pos, type: 'card', speak: pos }; break;
-            case 'C2N': displayEl.innerHTML = getCardDisplayHtml(card); currentTarget = { ans: pos.toString(), pos: pos, type: 'num', speak: getSpeakableCardName(card) }; break;
-            case 'NC': displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">AFTER:</div>${getCardDisplayHtml(card)}</div>`; currentTarget = { ans: stack[(pos % 52) + 1], pos: pos, type: 'card', speak: "After " + getSpeakableCardName(card) }; break;
-            case 'PC': displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">BEFORE:</div>${getCardDisplayHtml(card)}</div>`; currentTarget = { ans: stack[pos === 1 ? 52 : pos - 1], pos: pos, type: 'card', speak: "Before " + getSpeakableCardName(card) }; break;
-            case 'BA': 
-                const isBefore = Math.random() > 0.5;
-                displayEl.innerHTML = `<div style="display:flex; flex-direction:column; align-items:center;"><div class="prompt-label">${isBefore ? 'BEFORE' : 'AFTER'}:</div>${getCardDisplayHtml(card)}</div>`;
-                currentTarget = { ans: stack[isBefore ? (pos === 1 ? 52 : pos - 1) : (pos === 52 ? 1 : pos + 1)], pos: pos, type: 'card', speak: (isBefore ? "Before " : "After ") + getSpeakableCardName(card) };
-                break;
+        const min = parseInt(document.getElementById('minRange').value)||1, max = parseInt(document.getElementById('maxRange').value)||52;
+        let pool = []; for(let i=min; i<=max; i++) { pool.push(i); if(aiMode && heatData[i]>0) for(let h=0; h<heatData[i]*5; h++) pool.push(i); }
+        const pos = pool[Math.floor(Math.random()*pool.length)], card = stack[pos], el = document.getElementById('display');
+        let m = (currentMode === 'C2N_RAND') ? (Math.random()>0.5?'N2C':'C2N') : currentMode;
+        switch(m) {
+            case 'N2C': el.innerHTML = getCardDisplayHtml(pos); currentTarget = { ans: card, pos: pos, speak: pos }; break;
+            case 'C2N': el.innerHTML = getCardDisplayHtml(card); currentTarget = { ans: pos.toString(), pos: pos, speak: getSpeakableCardName(card) }; break;
+            case 'NC': el.innerHTML = `<div class="prompt-label">AFTER:</div>${getCardDisplayHtml(card)}`; currentTarget = { ans: stack[(pos%52)+1], pos: pos, speak: "After "+getSpeakableCardName(card) }; break;
+            case 'PC': el.innerHTML = `<div class="prompt-label">BEFORE:</div>${getCardDisplayHtml(card)}`; currentTarget = { ans: stack[pos===1?52:pos-1], pos: pos, speak: "Before "+getSpeakableCardName(card) }; break;
+            case 'BA': let b = Math.random()>0.5; el.innerHTML = `<div class="prompt-label">${b?'BEFORE':'AFTER'}:</div>${getCardDisplayHtml(card)}`; currentTarget = { ans: stack[b?(pos===1?52:pos-1):(pos===52?1:pos+1)], pos: pos, speak: (b?"Before ":"After ")+getSpeakableCardName(card) }; break;
         }
         if(voiceMode) speak(currentTarget.speak.toString());
-        activeTimerStart = Date.now();
-        renderInputArea();
+        activeTimerStart = Date.now(); renderInputArea();
     }
 
     function renderInputArea() {
-        document.getElementById('feedback').innerText = "";
-        if (inputMethod === 'type') { const inp = document.getElementById('answer'); inp.value = ""; inp.focus(); }
-        else {
-            const container = document.getElementById('choiceInputGroup');
-            container.innerHTML = "";
-            let choices = [currentTarget.ans];
-            while(choices.length < 3) {
-                let decoy = currentTarget.type === 'num' ? (Math.floor(Math.random() * 52) + 1).toString() : stack[Math.floor(Math.random() * 52) + 1];
-                if(decoy && !choices.includes(decoy)) choices.push(decoy);
-            }
-            choices.sort(() => Math.random() - 0.5).forEach(c => {
-                const btn = document.createElement('button'); btn.className = 'choice-btn'; btn.innerHTML = getCardTextHtml(c);
-                btn.onclick = () => validate(c); container.appendChild(btn);
-            });
+        document.getElementById('feedback').innerText = ""; const container = document.getElementById('choiceInputGroup'); container.innerHTML = "";
+        let choices = [currentTarget.ans];
+        while(choices.length < 3) {
+            let d = (isNaN(currentTarget.ans)) ? stack[Math.floor(Math.random()*52)+1] : (Math.floor(Math.random()*52)+1).toString();
+            if(d && !choices.includes(d)) choices.push(d);
         }
-    }
-
-    function validate(userAns) {
-        if (!currentTarget) return;
-        let timeSpent = 0;
-        if (activeTimerStart) { timeSpent = (Date.now() - activeTimerStart); totalActiveTime += timeSpent; activeTimerStart = null; }
-        if (!cardStats[currentTarget.pos]) cardStats[currentTarget.pos] = {c: 0, w: 0, time: 0};
-        cardStats[currentTarget.pos].time += timeSpent;
-        const correctAns = currentTarget.ans.toString().toUpperCase(), normalizedUser = userAns.toString().trim().toUpperCase(), feedback = document.getElementById('feedback');
-        if (normalizedUser === correctAns) {
-            stats.correct++; feedback.innerText = "CORRECT!"; feedback.style.color = "var(--correct-color)";
-            heatData[currentTarget.pos] = Math.max(heatData[currentTarget.pos] - 1, -5); cardStats[currentTarget.pos].c++;
-            if(voiceMode) speak("That is correct.");
-        } else {
-            stats.wrong++; feedback.innerText = `Wrong! Correct: ${correctAns}`; feedback.style.color = "var(--wrong-color)";
-            heatData[currentTarget.pos] = Math.max(heatData[currentTarget.pos] + 1, 0); cardStats[currentTarget.pos].w++;
-            if(voiceMode) { let cardFull = getSpeakableCardName(correctAns); speak(`Wrong. The answer is ${cardFull}`); }
-        }
-        stats.total = stats.correct + stats.wrong; updateUI(); saveAll();
-        setTimeout(generateQuestion, normalizedUser === correctAns ? 1200 : 3500);
-    }
-
-    function updateUI() { document.getElementById('score-correct').innerText = stats.correct; document.getElementById('score-wrong').innerText = stats.wrong; document.getElementById('score-total').innerText = stats.total; renderHistory(); renderHeatMap(); }
-    
-    function renderHistory() {
-        const body = document.getElementById('historyBody'); body.innerHTML = "";
-        let totalC = 0, totalT = 0, maxPct = 0, minSpeed = 999;
-        sessionHistory.forEach(s => { totalC += s.correct; totalT += s.total; if(s.pct > maxPct) maxPct = s.pct; if(parseFloat(s.speed) < minSpeed) minSpeed = parseFloat(s.speed); });
-        sessionHistory.forEach((s) => {
-            const isBestAcc = s.pct === maxPct && maxPct > 0, isBestSpeed = parseFloat(s.speed) === minSpeed && minSpeed < 999;
-            body.innerHTML += `<tr class="${isBestAcc ? 'best-acc' : ''}"><td>${s.date}${isBestAcc ? '<span class="badge">⭐</span>' : ''}${isBestSpeed ? '<span class="badge">⚡</span>' : ''}</td><td>${s.correct}/${s.wrong}</td><td>${s.total}</td><td>${s.pct}%</td><td>${s.time}</td><td class="${parseFloat(s.speed) < 2.0 ? 'speed-hit' : ''}">${s.speed}s</td></tr>`;
+        choices.sort(()=>Math.random()-0.5).forEach(c => {
+            const b = document.createElement('button'); b.className = 'choice-btn'; b.innerHTML = getCardTextHtml(c);
+            b.onclick = () => validate(c); container.appendChild(b);
         });
-        document.getElementById('lifetime-pct').innerText = totalT > 0 ? Math.round((totalC / totalT) * 100) + "%" : "0%";
     }
 
+    function validate(u) {
+        if(!currentTarget) return; let t = 0; if(activeTimerStart) { t = Date.now()-activeTimerStart; totalActiveTime += t; activeTimerStart=null; }
+        if(!cardStats[currentTarget.pos]) cardStats[currentTarget.pos] = {c:0, w:0, time:0}; cardStats[currentTarget.pos].time += t;
+        const correct = currentTarget.ans.toUpperCase(), user = u.toString().toUpperCase(), f = document.getElementById('feedback');
+        if(user === correct) {
+            stats.correct++; f.innerText = "CORRECT!"; f.style.color = "var(--correct-color)"; heatData[currentTarget.pos]--; cardStats[currentTarget.pos].c++;
+            if(voiceMode) speak("Correct");
+        } else {
+            stats.wrong++; f.innerText = "Wrong! "+correct; f.style.color = "var(--wrong-color)"; heatData[currentTarget.pos]++; cardStats[currentTarget.pos].w++;
+            if(voiceMode) speak("Wrong, it was " + getSpeakableCardName(correct));
+        }
+        stats.total++; updateUI(); saveAll(); setTimeout(generateQuestion, user===correct?1200:3000);
+    }
+
+    function updateUI() {
+        document.getElementById('score-correct').innerText = stats.correct; document.getElementById('score-wrong').innerText = stats.wrong; document.getElementById('score-total').innerText = stats.total;
+        renderHistory(); renderHeatMap();
+    }
+    function renderHistory() {
+        const b = document.getElementById('historyBody'); b.innerHTML = "";
+        sessionHistory.forEach(s => { b.innerHTML += `<tr><td>${s.date}</td><td>${s.correct}/${s.wrong}</td><td>${s.pct}%</td><td>${s.speed}s</td></tr>`; });
+    }
     function renderHeatMap() {
-        const container = document.getElementById('heatMap'); container.innerHTML = "";
-        for (let i = 1; i <= 52; i++) {
-            const cell = document.createElement('div'); cell.className = 'heat-cell'; cell.innerText = i; let val = heatData[i];
-            if (val > 0) { cell.style.backgroundColor = `rgb(${Math.max(255 - (val * 40), 100)}, 0, 0)`; cell.style.color = "white"; }
-            else if (val < 0) { cell.style.backgroundColor = "#4a90e2"; cell.style.color = "white"; }
-            else cell.style.backgroundColor = "var(--heat-base)";
-            container.appendChild(cell);
+        const c = document.getElementById('heatMap'); c.innerHTML = "";
+        for(let i=1; i<=52; i++) {
+            const cell = document.createElement('div'); cell.className = 'heat-cell'; cell.innerText = i;
+            if(heatData[i]>0) { cell.style.background = `rgb(${Math.max(255-heatData[i]*40,100)},0,0)`; cell.style.color="white"; }
+            else if(heatData[i]<0) { cell.style.background = "#457b9d"; cell.style.color="white"; }
+            c.appendChild(cell);
         }
     }
 
-    function clearHistory() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
-    document.getElementById('answer').addEventListener('keypress', (e) => { if (e.key === 'Enter') validate(e.target.value); });
-
-    /* -------------------------------------------------------------------
-       HD VOICE ENGINE (Clean Audio & Voice Selection)
-    ------------------------------------------------------------------- */
-    const voiceNames = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
-    let isSpeaking = false, audioContext, preferredVoice = null;
-    function loadVoices() {
-        let voices = window.speechSynthesis.getVoices();
-        preferredVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en-US')) || voices.find(v => v.name.includes('Premium')) || voices.find(v => v.lang.includes('en-US')) || voices[0];
+    function archiveAndRestart() {
+        if(stats.total > 0) {
+            sessionHistory.unshift({ date: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), correct: stats.correct, wrong: stats.wrong, pct: Math.round((stats.correct/stats.total)*100), speed: (totalActiveTime/1000/stats.total).toFixed(1) });
+            if(sessionHistory.length>10) sessionHistory.pop();
+        }
+        stats = {correct:0, wrong:0, total:0}; totalActiveTime=0; updateUI(); generateQuestion();
     }
-    window.speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
+    function setMode(m, r=true) { currentMode=m; document.querySelectorAll('.mode-tray .action-btn').forEach(b=>b.classList.remove('selected-mode')); if(r) archiveAndRestart(); saveAll(); }
+    function setInputMethod(m) { inputMethod=m; saveAll(); }
 
-    function resumeAudio() {
-        try {
-            if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioContext.state === 'suspended') audioContext.resume();
-            const utterance = new SpeechSynthesisUtterance(""); window.speechSynthesis.speak(utterance);
-        } catch (e) { console.log("Audio Resume Error:", e); }
+    function speak(t) { if(!voiceMode) return; window.speechSynthesis.cancel(); let m = new SpeechSynthesisUtterance(t); m.onstart=()=>updateMicIcon(false); m.onend=()=>updateMicIcon(true); window.speechSynthesis.speak(m); }
+    function updateMicIcon(l) { document.getElementById('micStatus').classList.toggle('listening', l && voiceMode); }
+    function getSpeakableCardName(c) {
+        if(!isNaN(c)) return c; const names = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
+        let v = c.slice(0,-1), s = c.slice(-1); return (names[v]||v) + " of " + names[s];
     }
 
-    function getSpeakableCardName(code) {
-        if(!isNaN(code)) return code;
-        let val = code.slice(0, -1), suit = code.slice(-1);
-        if(val === "10") val = "Ten";
-        return (voiceNames[val] || val) + " of " + voiceNames[suit];
-    }
-
-    function speak(text) {
-        if(!voiceMode) return; window.speechSynthesis.cancel(); resumeAudio();
-        setTimeout(() => {
-            let msg = new SpeechSynthesisUtterance(text); if (preferredVoice) msg.voice = preferredVoice;
-            msg.rate = 1.05; msg.pitch = 1.0; msg.volume = 1.0;
-            msg.onstart = () => { isSpeaking = true; updateMicIcon(false); };
-            msg.onend = () => { isSpeaking = false; updateMicIcon(true); };
-            window.speechSynthesis.speak(msg);
-        }, 150);
-    }
-
-    function updateMicIcon(isListening) {
-        const micBtn = document.getElementById('micStatus'); if(!micBtn) return;
-        if(isListening && voiceMode) micBtn.classList.add('listening'); else micBtn.classList.remove('listening');
-    }
-
+    function toggleAI() { aiMode=!aiMode; document.getElementById('aiBtn').innerText = aiMode?"AI: ON":"AI: OFF"; document.getElementById('aiBtn').classList.toggle('active', aiMode); saveAll(); }
+    function toggleVoice() { voiceMode=!voiceMode; document.getElementById('voiceBtn').innerText = voiceMode?"Voice: ON":"Voice: OFF"; document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('micStatus').classList.toggle('active-mode', voiceMode); if(voiceMode) initVoiceRecognition(); saveAll(); }
+    
     let recognition;
     function initVoiceRecognition() {
-        const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if(!SpeechRecognition) { document.getElementById('voiceDebug').innerText = "System: No Speech Engine Found"; return; }
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
-                document.getElementById('voiceDebug').innerText = "Hardware: Mic Access Granted"; startRecognitionEngine(SpeechRecognition);
-            }).catch(function(err) { document.getElementById('voiceDebug').innerText = "Hardware Error: " + err.name; startRecognitionEngine(SpeechRecognition); });
-        } else { startRecognitionEngine(SpeechRecognition); }
+        const R = window.webkitSpeechRecognition || window.SpeechRecognition; if(!R) return;
+        recognition = new R(); recognition.continuous=true; recognition.lang='en-US';
+        recognition.onresult = (e) => { const t = e.results[e.results.length-1][0].transcript; document.getElementById('voiceDebug').innerText="Heard: "+t; processVoiceInput(t); };
+        recognition.onend = () => { if(voiceMode) recognition.start(); };
+        try { recognition.start(); updateMicIcon(true); } catch(e){}
+    }
+    function processVoiceInput(t) {
+        let i = t.toLowerCase(); const map = {"to":"2","too":"2","two":"2","three":"3","for":"4","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9","ten":"10","one":"1"};
+        for(let k in map) i = i.replace(new RegExp("\\b"+k+"\\b","g"), map[k]);
+        const sMatch = i.match(/hearts|diamonds|clubs|spades/); const vMatch = i.match(/ace|king|queen|jack|10|[1-9]/);
+        if(sMatch && vMatch) { validate( (vMatch[0][0].toUpperCase()==='1'? '10' : vMatch[0][0].toUpperCase()) + sMatch[0][0].toUpperCase() ); }
+        else { let d = i.match(/\d+/); if(d) validate(d[0]); }
     }
 
-    function startRecognitionEngine(SpeechComp) {
-        if(recognition) { recognition.onend = null; recognition.stop(); }
-        recognition = new SpeechComp(); recognition.continuous = true; recognition.interimResults = false; recognition.lang = 'en-US'; recognition.maxAlternatives = 3; 
-        recognition.onresult = (event) => {
-            if (isSpeaking) return; const results = event.results[event.results.length - 1];
-            for (let i = 0; i < results.length; i++) {
-                let transcript = results[i].transcript.toLowerCase(); document.getElementById('voiceDebug').innerText = "Heard: " + transcript;
-                if (processVoiceInput(transcript)) break;
-            }
-        };
-        recognition.onerror = (e) => { document.getElementById('voiceDebug').innerText = "Mic error: " + e.error; if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 1000); };
-        recognition.onend = () => { if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); };
-        try { recognition.start(); updateMicIcon(true); } catch(e) { console.log("Mic Start Fail:", e); }
+    function saveAll() { localStorage.setItem('redfordTrainer_v1.4', JSON.stringify({inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, cardStats, totalActiveTime})); }
+    function loadAll() {
+        const s = JSON.parse(localStorage.getItem('redfordTrainer_v1.4') || "{}");
+        if(s.heatData) { inputMethod=s.inputMethod; aiMode=s.aiMode; voiceMode=s.voiceMode; currentMode=s.currentMode; heatData=s.heatData; sessionHistory=s.sessionHistory; isDarkMode=s.isDarkMode; cardStats=s.cardStats; totalActiveTime=s.totalActiveTime; }
+        applyTheme(); updateUI(); generateQuestion();
     }
-
-    function processVoiceInput(text) {
-        let input = text.toLowerCase().trim(); document.getElementById('voiceDebug').innerText = "Heard: " + input;
-        const phoneticMap = { "to": "2", "too": "2", "two": "2", "three": "3", "tree": "3", "for": "4", "fore": "4", "four": "4", "floor": "4", "five": "5", "fine": "5", "fire": "5", "hive": "5", "find": "5", "six": "6", "sex": "6", "seven": "7", "heaven": "7", "savin": "7", "level": "7", "ate": "8", "eight": "8", "aitch": "8", "nine": "9", "line": "9", "mine": "9", "ten": "10", "tin": "10", "then": "10", "one": "1", "won": "1" };
-        for (let word in phoneticMap) { let reg = new RegExp("\\b" + word + "\\b", "g"); input = input.replace(reg, phoneticMap[word]); }
-        const suits = { "hearts": "H", "heart": "H", "diamonds": "D", "diamond": "D", "clubs": "C", "club": "C", "spades": "S", "spade": "S" };
-        const faces = { "ace": "A", "ice": "A", "king": "K", "can": "K", "queen": "Q", "green": "Q", "quinn": "Q", "jack": "J", "check": "J", "ten": "10" };
-        let foundSuit = null, foundVal = null;
-        for (let s in suits) { if (input.includes(s)) { foundSuit = suits[s]; break; } }
-        for (let f in faces) { if (input.includes(f)) { foundVal = faces[f]; break; } }
-        if (!foundVal) { let numMatch = input.match(/(10|[1-9])/); if (numMatch) foundVal = numMatch[0]; }
-        if (foundSuit && foundVal) { validate(foundVal + foundSuit); return true; } 
-        else { let digits = input.match(/\d+/); if (digits) { if (currentMode === 'N2C' && digits[0] == currentTarget.pos) return false; validate(digits[0]); return true; } }
-        return false;
-    }
-    async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {} }
-    function releaseWakeLock() { if(wakeLock) { wakeLock.release(); wakeLock = null; } }
+    async function requestWakeLock() { if('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); }
     loadAll();
 </script>
 </body>
