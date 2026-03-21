@@ -12,6 +12,7 @@
             --accent: #a98467;
             --correct: #6a994e;
             --warning: #bc4749;
+            --neon-mic: #39ff14;
         }
         @media (prefers-color-scheme: dark) {
             :root {
@@ -24,78 +25,78 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            line-height: 1.6;
-            padding: 20px;
-            margin: 0;
-            display: flex;
-            justify-content: center;
+            line-height: 1.6; padding: 20px; margin: 0;
+            display: flex; justify-content: center;
         }
         .guide-container {
-            max-width: 600px;
-            background-color: var(--container-bg);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            max-width: 650px; background-color: var(--container-bg);
+            padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
         h1 { color: var(--accent); border-bottom: 2px solid var(--accent); padding-bottom: 10px; margin-top: 0; }
         h2 { font-size: 1.2rem; margin-top: 25px; display: flex; align-items: center; gap: 10px; }
-        .step { background: rgba(0,0,0,0.05); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
-        .alert { background: rgba(188, 71, 73, 0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--warning); }
+        .step { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--accent); }
+        .alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--warning); }
+        .mode-box { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
+        .mode-item { background: rgba(0,0,0,0.05); padding: 10px; border-radius: 6px; font-size: 0.9rem; }
+        .mic-glow { color: var(--neon-mic); font-weight: bold; text-shadow: 0 0 5px var(--neon-mic); }
         code { background: rgba(0,0,0,0.1); padding: 2px 6px; border-radius: 4px; font-weight: bold; }
-        .tip { font-style: italic; color: var(--correct); font-weight: bold; }
         .back-btn { display: inline-block; margin-top: 20px; color: var(--accent); text-decoration: none; font-weight: bold; }
-        ul { padding-left: 20px; }
-        li { margin-bottom: 8px; }
     </style>
 </head>
 <body>
 
 <div class="guide-container">
     <h1>Stack Trainer Guide</h1>
-    <p>Master the <b>Redford Stack</b> using hands-free voice commands and AI-driven drills.</p>
 
     <div class="step">
-        <h2>📲 1. Installation</h2>
-        <p>This tool is a <b>Progressive Web App (PWA)</b>. It works best when "installed" to bypass browser limits:</p>
+        <h2>🛠 Interface Legend</h2>
         <ul>
-            <li><b>Android:</b> Open in Chrome, tap <code>⋮</code> then <b>"Install App"</b>.</li>
-            <li><b>iPhone:</b> Open in Safari, tap <b>Share</b> (square icon) then <b>"Add to Home Screen"</b>.</li>
+            <li>🌙/☀️ <b>Theme:</b> Toggle between Light and Dark mode.</li>
+            <li>📋 <b>Clipboard:</b> View full stack. Tap any card for lifetime stats.</li>
+            <li>🔥 <b>Fire:</b> Heat Map. (Red = Needs work, Blue = Mastered).</li>
+            <li>🏆 <b>Stats:</b> Track current session accuracy and Pace.</li>
+            <li>⚙ <b>Settings:</b> Adjust card range and toggle AI/Voice modes.</li>
+            <li>🎤 <b>Mic Icon:</b> Active in Voice Mode. A <span class="mic-glow">Green Glow</span> means the app is currently listening for your answer.</li>
         </ul>
     </div>
 
     <div class="step">
-        <h2>🎤 2. Voice Commands</h2>
-        <p>The AI listens for specific patterns. Speak clearly and naturally:</p>
+        <h2>🧠 Training Modes</h2>
+        <p>Tap <b>Mode</b> to select your drill:</p>
+        <div class="mode-box">
+            <div class="mode-item"><b>Number → Card:</b> Say the card at the given position.</div>
+            <div class="mode-item"><b>Card → Number:</b> Say the stack number for the card shown.</div>
+            <div class="mode-item"><b>Random:</b> Swaps between N2C and C2N drills.</div>
+            <div class="mode-item"><b>Next Card:</b> Practice the card that follows the one shown.</div>
+            <div class="mode-item"><b>Prev Card:</b> Practice the card that precedes the one shown.</div>
+            <div class="mode-item"><b>Before/After:</b> Practice both neighbors for any card shown.</div>
+        </div>
+    </div>
+
+    <div class="step">
+        <h2>📊 Mic Status & Feedback</h2>
         <ul>
-            <li><b>Cards:</b> <code>"Five of Clubs"</code>, <code>"Ace of Spades"</code>, etc.</li>
-            <li><b>Numbers:</b> Say <code>"Number 14"</code> or <code>"Number 5"</code>.</li>
-            <li><b>Fuzzy Logic:</b> The app is trained to understand slips like <i>"fine"</i> for 5 or <i>"heaven"</i> for 7.</li>
+            <li><b>Mic Status:</b> Shows if the hardware is standby, active, or blocked.</li>
+            <li><b>"Heard":</b> Displays exactly what the AI transcribed. Use this to verify if the app is understanding your voice correctly.</li>
         </ul>
     </div>
 
     <div class="alert">
-        <h2>🎧 3. Bluetooth & Car Audio</h2>
-        <p>If your car or earbuds think the app is a "Phone Call" and highjack the mic:</p>
+        <h2>🎧 Bluetooth & Car Audio</h2>
+        <p>If your car or earbuds highjack the mic as a "Phone Call":</p>
         <ul>
             <li>Go to your phone's <b>Bluetooth Settings</b>.</li>
-            <li>Select your device (Car/Earbuds).</li>
-            <li>Toggle <b>OFF "Phone Calls"</b> but keep <b>"Media Audio" ON</b>.</li>
+            <li>Select your device and toggle <b>OFF "Phone Calls"</b> but keep <b>"Media Audio" ON</b>.</li>
         </ul>
-        <p>This allows the app to play audio through your speakers while using the phone's built-in microphone for 100% accuracy.</p>
     </div>
 
     <div class="step">
-        <h2>🛠 4. Interface Legend</h2>
+        <h2>⚠️ Troubleshooting & Audio Fixes</h2>
         <ul>
-            <li>📋 <b>Clipboard:</b> Full Stack reference (tap a card for lifetime stats).</li>
-            <li>🔥 <b>Fire:</b> Your Heat Map. Red cards need work; Blue are mastered.</li>
-            <li>⚙ <b>Settings:</b> Toggle AI Mode, Voice, and set your practice range (e.g., Cards 1-26).</li>
+            <li><b>Browser Permissions:</b> Ensure your default browser (Chrome/Safari) has <b>Microphone Access</b> enabled in your phone's System Settings.</li>
+            <li><b>Spatial Audio:</b> For 100% audio reliability, <b>Turn OFF Spatial Audio</b> in your phone's sound settings and for all connected Bluetooth devices.</li>
+            <li><b>Battery Saver:</b> Disable Battery Saver mode; it often lowers audio quality, causing static or recognition errors.</li>
         </ul>
-    </div>
-
-    <div class="step">
-        <h2>🧠 5. AI Training</h2>
-        <p>When <b>AI: ON</b> is selected, the app stops being random. It will intelligently feed you the cards you struggle with most until you've corrected the "Heat" in your map.</p>
     </div>
 
     <a href="index.html" class="back-btn">← Back to Trainer</a>
