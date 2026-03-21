@@ -102,6 +102,12 @@
         .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 2rem; cursor: pointer; font-weight: 900; color: var(--btn-color); line-height: 1; }
 
+        /* CRIB PREVIEW OVERLAY */
+        #cribPreview { background: black; z-index: 2000; flex-direction: column; }
+        .crib-img-container { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; overflow: hidden; }
+        .crib-img-container img { max-width: 95%; max-height: 80vh; object-fit: contain; box-shadow: 0 0 20px rgba(255,255,255,0.2); }
+        .crib-back-btn { position: absolute; top: 20px; left: 20px; background: var(--btn-color); color: white; padding: 12px 20px; border-radius: 8px; font-weight: bold; font-size: 1rem; box-shadow: 0 4px 15px rgba(0,0,0,0.5); z-index: 2100; }
+
         /* HELP MODAL STYLES */
         .help-section { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--btn-color); }
         .help-alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--wrong-color); }
@@ -111,7 +117,7 @@
         .help-section ul { padding-left: 20px; margin-bottom: 0; }
         .help-section li { margin-bottom: 5px; font-size: 0.9rem; }
         .mic-glow-text { color: var(--mic-glow-text-color); font-weight: bold; text-shadow: var(--mic-glow-text-shadow); transition: color 0.3s ease, text-shadow 0.3s ease; }
-        .crib-btn { display: inline-block; background: var(--btn-color); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; text-align: center; }
+        .crib-btn { display: inline-block; background: var(--btn-color); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; text-align: center; border: none; }
 
         .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
         .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
@@ -164,6 +170,16 @@
     </style>
 </head>
 <body>
+
+<div id="cribPreview" class="modal-overlay hidden">
+    <button class="crib-back-btn" onclick="toggleCribPreview()">← Back to Guide</button>
+    <div class="crib-img-container">
+        <img src="crib.png" alt="Card Box Crib">
+    </div>
+    <div style="color: white; font-size: 0.8rem; margin-top: 10px; opacity: 0.7; padding-bottom: 20px;">
+        Long-press image to Save or Print
+    </div>
+</div>
 
 <div id="helpModal" class="modal-overlay hidden">
     <div class="modal-content">
@@ -221,7 +237,7 @@
             <h2 style="color: var(--correct-color);">🎁 Special Bonus: Card Box Crib</h2>
             <p style="font-size:0.85rem;">As a thank you for using our Redford Stack Trainer, here is a free card box crib that contains the full Redford Stack reference.</p>
             <p style="font-size:0.85rem;"><b>The Secret:</b> Hidden in the UPC code is the shuffle sequence needed to take a deck in Si Stebbins stack to Redford Stack order.</p>
-            <a href="crib.png" target="_blank" class="crib-btn">View & Print Crib</a>
+            <button onclick="toggleCribPreview()" class="crib-btn">View & Print Crib</button>
             <p style="font-size:0.75rem; margin-top:10px; font-style:italic;">Note: This is sized for a standard Bicycle Poker box (2.56" x 3.63" / 65mm x 92mm). Ensure your printer is set to <b>"Actual Size" (100% Scale)</b>.</p>
         </div>
     </div>
@@ -315,7 +331,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.5</div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.6</div>
 </div>
 
 <script>
@@ -325,6 +341,7 @@
     let stats = { correct: 0, wrong: 0, total: 0 }, heatData = Array(53).fill(0), sessionHistory = [], cardStats = {}, totalActiveTime = 0, activeTimerStart = null, wakeLock = null;
 
     function toggleHelpModal() { document.getElementById('helpModal').classList.toggle('hidden'); }
+    function toggleCribPreview() { document.getElementById('cribPreview').classList.toggle('hidden'); }
     function toggleTheme() { isDarkMode = !isDarkMode; applyTheme(); saveAll(); }
     function applyTheme() { document.body.classList.toggle('dark-theme', isDarkMode); document.getElementById('themeBtn').innerText = isDarkMode ? "☀️" : "🌙"; }
     function toggleSettings() { document.getElementById('settingsTray').classList.toggle('hidden'); }
