@@ -94,14 +94,20 @@
         .stack-num { font-weight: 800; font-size: 0.8em; color: var(--text-color); background: var(--num-bg); padding: 2px 0; width: 100%; }
         .stack-val-label { padding: 4px 0; font-weight: bold; font-size: 1.1em; }
 
+        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 2rem; cursor: pointer; font-weight: 900; color: var(--btn-color); line-height: 1; }
 
+        /* HELP MODAL STYLES */
         .help-section { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--btn-color); }
         .help-alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--wrong-color); }
         .help-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
         .help-mode-item { background: rgba(0,0,0,0.05); padding: 10px; border-radius: 6px; font-size: 0.85rem; }
+        .help-section h2 { font-size: 1.1rem; margin-top: 0; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+        .help-section ul { padding-left: 20px; margin-bottom: 0; }
+        .help-section li { margin-bottom: 5px; font-size: 0.9rem; }
+        .mic-glow-text { color: var(--neon-mic); font-weight: bold; text-shadow: 0 0 5px var(--neon-mic); }
 
         .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
         .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
@@ -161,40 +167,50 @@
         <h1 style="color:var(--btn-color); border-bottom:2px solid var(--btn-color); padding-bottom:10px; margin-top:0;">Stack Trainer Guide</h1>
         
         <div class="help-section">
-            <h2 style="font-size:1.2rem; margin-top:0;">📲 1. Installation</h2>
-            <p>Save to home screen for full-screen mode and persistent mic access:</p>
+            <h2>🛠 Interface Legend</h2>
             <ul>
-                <li><b>Android:</b> Chrome > <code>⋮</code> > <b>Install App</b>.</li>
-                <li><b>iPhone:</b> Safari > <b>Share</b> > <b>Add to Home Screen</b>.</li>
+                <li><b>🌙/☀️ Theme:</b> Toggle between Light and Dark mode.</li>
+                <li><b>📋 Clipboard:</b> View full stack. Tap any card for lifetime stats.</li>
+                <li><b>🔥 Fire:</b> Heat Map. (Red = Slow/Wrong, Blue = Mastered).</li>
+                <li><b>🏆 Stats:</b> Track current session accuracy and Pace.</li>
+                <li><b>⚙ Settings:</b> Adjust card range and toggle AI/Voice modes.</li>
+                <li><b>🎤 Mic Icon:</b> Active in Voice Mode. A <span class="mic-glow-text">Green Glow</span> means the app is actively listening.</li>
             </ul>
         </div>
 
         <div class="help-section">
-            <h2 style="font-size:1.2rem; margin-top:0;">🎤 2. Voice Commands</h2>
-            <p>Speak clearly: <code>"Five of Clubs"</code> or <code>"Number 14"</code>. A <b>Green Glow</b> on the mic means the app is listening.</p>
-        </div>
-
-        <div class="help-section">
-            <h2 style="font-size:1.2rem; margin-top:0;">🧠 3. Training Modes</h2>
+            <h2>🧠 Training Modes</h2>
+            <p style="font-size:0.85rem; margin-bottom:8px;">Tap <b>Mode</b> to select your drill:</p>
             <div class="help-mode-grid">
-                <div class="help-mode-item"><b>N2C:</b> Pos to Card</div>
-                <div class="help-mode-item"><b>C2N:</b> Card to Pos</div>
-                <div class="help-mode-item"><b>Next:</b> Card Follows</div>
-                <div class="help-mode-item"><b>Prev:</b> Card Precedes</div>
+                <div class="help-mode-item"><b>Number → Card:</b> Say the card at the given position.</div>
+                <div class="help-mode-item"><b>Card → Number:</b> Say the stack number for the card shown.</div>
+                <div class="help-mode-item"><b>Random:</b> Swaps between N2C and C2N drills.</div>
+                <div class="help-mode-item"><b>Next Card:</b> Practice what follows the card shown.</div>
+                <div class="help-mode-item"><b>Prev Card:</b> Practice what precedes the card shown.</div>
+                <div class="help-mode-item"><b>Before/After:</b> Practice both neighbors for any card shown.</div>
             </div>
         </div>
 
+        <div class="help-section">
+            <h2>📊 Mic Status & Feedback</h2>
+            <ul>
+                <li><b>Mic Status:</b> Shows if hardware is standby, active, or blocked.</li>
+                <li><b>"Heard":</b> Displays exactly what the AI transcribed to verify recognition.</li>
+            </ul>
+        </div>
+
         <div class="help-alert">
-            <h2 style="font-size:1.2rem; margin-top:0;">🎧 4. Bluetooth Fix</h2>
-            <p>If car audio acts like a "Phone Call": Go to Bluetooth settings, find device, toggle <b>OFF "Phone Calls"</b> but keep <b>"Media Audio" ON</b>.</p>
+            <h2>🎧 Bluetooth & Car Audio</h2>
+            <p>If your car/earbuds highjack the mic as a "Phone Call":</p>
+            <p>Go to <b>Bluetooth Settings</b> > Select device > toggle <b>OFF "Phone Calls"</b> but keep <b>"Media Audio" ON</b>.</p>
         </div>
 
         <div class="help-section">
-            <h2 style="font-size:1.2rem; margin-top:0;">⚠️ 5. Audio Fixes</h2>
+            <h2>⚠️ Troubleshooting & Audio Fixes</h2>
             <ul>
-                <li><b>Permissions:</b> Browser must have <b>Mic Access</b> in system settings.</li>
-                <li><b>Spatial Audio:</b> Turn <b>OFF</b> for the phone and Bluetooth device.</li>
-                <li><b>Battery Saver:</b> Disable for best voice recognition.</li>
+                <li><b>Browser Permissions:</b> Ensure browser has <b>Microphone Access</b> in System Settings.</li>
+                <li><b>Spatial Audio:</b> For reliability, <b>Turn OFF Spatial Audio</b> in phone and Bluetooth settings.</li>
+                <li><b>Battery Saver:</b> Disable mode; it can cause static or recognition errors.</li>
             </ul>
         </div>
     </div>
@@ -288,7 +304,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.2</div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.3</div>
 </div>
 
 <script>
@@ -403,6 +419,7 @@
             const cell = document.createElement('div'); cell.className = 'heat-cell'; cell.innerText = i;
             if(heatData[i]>0) { cell.style.background = `rgb(${Math.max(255-heatData[i]*40,100)},0,0)`; cell.style.color="white"; }
             else if(heatData[i]<0) { cell.style.background = "#457b9d"; cell.style.color="white"; }
+            else cell.style.background = "var(--heat-base)";
             c.appendChild(cell);
         }
     }
