@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stack-trainer-v1.4.6';
+const CACHE_NAME = 'stack-trainer-v1.4.7';
 const ASSETS = [
   'index.html',
   'help.html',
