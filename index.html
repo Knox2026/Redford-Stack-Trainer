@@ -37,7 +37,7 @@
             --toggle-active-text: #432818;
             --num-bg: #d5bdaf;
             --neon-mic: #39ff14;
-            --mic-glow-text-color: #2a6f2a; /* Light Mode: Bold Dark Green */
+            --mic-glow-text-color: #2a6f2a;
             --mic-glow-text-shadow: none;
         }
 
@@ -57,7 +57,7 @@
             --toggle-active-bg: #f5ebe0;
             --toggle-active-text: #121212;
             --num-bg: #404040;
-            --mic-glow-text-color: #39ff14; /* Dark Mode: Neon Green */
+            --mic-glow-text-color: #39ff14;
             --mic-glow-text-shadow: 0 0 5px #39ff14;
         }
 
@@ -102,6 +102,7 @@
         .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 2rem; cursor: pointer; font-weight: 900; color: var(--btn-color); line-height: 1; }
 
+        /* HELP MODAL STYLES */
         .help-section { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--btn-color); }
         .help-alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--wrong-color); }
         .help-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
@@ -110,6 +111,7 @@
         .help-section ul { padding-left: 20px; margin-bottom: 0; }
         .help-section li { margin-bottom: 5px; font-size: 0.9rem; }
         .mic-glow-text { color: var(--mic-glow-text-color); font-weight: bold; text-shadow: var(--mic-glow-text-shadow); transition: color 0.3s ease, text-shadow 0.3s ease; }
+        .crib-btn { display: inline-block; background: var(--btn-color); color: white; padding: 10px 15px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; text-align: center; }
 
         .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
         .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
@@ -182,7 +184,6 @@
 
         <div class="help-section">
             <h2>🧠 Training Modes</h2>
-            <p style="font-size:0.85rem; margin-bottom:8px;">Tap <b>Mode</b> to select your drill:</p>
             <div class="help-mode-grid">
                 <div class="help-mode-item"><b>Number → Card:</b> Say the card at the given position.</div>
                 <div class="help-mode-item"><b>Card → Number:</b> Say the stack number for the card shown.</div>
@@ -214,6 +215,14 @@
                 <li><b>Spatial Audio:</b> For reliability, <b>Turn OFF Spatial Audio</b> in phone and Bluetooth settings.</li>
                 <li><b>Battery Saver:</b> Disable mode; it can cause static or recognition errors.</li>
             </ul>
+        </div>
+
+        <div class="help-section" style="border-left: 4px solid var(--correct-color);">
+            <h2 style="color: var(--correct-color);">🎁 Special Bonus: Card Box Crib</h2>
+            <p style="font-size:0.85rem;">As a thank you for using our Redford Stack Trainer, here is a free card box crib that contains the full Redford Stack reference.</p>
+            <p style="font-size:0.85rem;"><b>The Secret:</b> Hidden in the UPC code is the shuffle sequence needed to take a deck in Si Stebbins stack to Redford Stack order.</p>
+            <a href="crib.png" target="_blank" class="crib-btn">View & Print Crib</a>
+            <p style="font-size:0.75rem; margin-top:10px; font-style:italic;">Note: This is sized for a standard Bicycle Poker box (2.56" x 3.63" / 65mm x 92mm). Ensure your printer is set to <b>"Actual Size" (100% Scale)</b>.</p>
         </div>
     </div>
 </div>
@@ -306,7 +315,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.4</div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.5</div>
 </div>
 
 <script>
