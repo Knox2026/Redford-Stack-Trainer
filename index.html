@@ -81,15 +81,11 @@
         button { cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); border: none; outline: none; display: flex; align-items: center; justify-content: center; }
         button:active { transform: scale(0.95); }
 
-        /* Unified Icon Button Style */
         .theme-toggle-btn, .stack-view-btn, .heat-view-btn, .voice-status-btn, .settings-toggle-btn, .history-toggle-btn { 
             background: var(--btn-color); color: var(--btn-text); width: 42px; height: 38px; border-radius: 8px; font-size: 1.2rem; 
         }
 
-        /* SVG icon centering and sizing */
-        .settings-toggle-btn svg {
-            width: 20px; height: 20px; fill: var(--btn-text); display: block;
-        }
+        .settings-toggle-btn svg { width: 20px; height: 20px; fill: var(--btn-text); display: block; }
         
         #settingsTray, #historyTray, #stackTray, #modeTray { background: var(--tray-bg); padding: 15px; border-radius: 12px; margin-bottom: 15px; border: 1px solid var(--border-color); }
 
@@ -103,30 +99,27 @@
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 1.5rem; cursor: pointer; opacity: 0.5; }
         .stat-row { display: flex; justify-content: space-between; margin: 10px 0; border-bottom: 1px solid var(--border-color); padding-bottom: 5px; font-weight: 500; }
 
+        /* Restored History Table Styling */
+        .history-table { width: 100%; border-collapse: collapse; font-size: 0.75em; margin-top: 10px; }
+        .history-table th { border-bottom: 2px solid var(--btn-color); padding: 10px 5px; color: var(--text-color); opacity: 0.8; }
+        .history-table td { padding: 10px 5px; border-bottom: 1px solid var(--border-color); }
+        .best-acc { background-color: rgba(255, 235, 59, 0.1) !important; font-weight: bold; } 
+        .speed-hit { color: var(--correct-color); font-weight: bold; }
+        .badge { font-size: 1.2em; margin-left: 5px; filter: drop-shadow(0 1px 1px rgba(0,0,0,0.4)); vertical-align: middle; }
+
         .scoreboard { display: grid; grid-template-columns: repeat(3, 1fr); background: rgba(0,0,0,0.1); padding: 8px 12px; border-radius: 12px; margin-bottom: 15px; font-weight: bold; font-size: 1.1em; }
         .stat-val { margin-left: 4px; }
         .green { color: var(--correct-color); }
         .red { color: var(--wrong-color); }
 
         .card-display { height: 280px; display: flex; align-items: center; justify-content: center; margin: 10px 0; border-radius: 12px; }
-        
         .number-card {
-            height: 200px; aspect-ratio: 2.5 / 3.5;
-            background: white; border-radius: 10px;
-            display: flex; align-items: center; justify-content: center;
-            font-size: 100px; color: #1a1a1a;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #ccc;
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            font-weight: 700;
+            height: 200px; aspect-ratio: 2.5 / 3.5; background: white; border-radius: 10px;
+            display: flex; align-items: center; justify-content: center; font-size: 100px; color: #1a1a1a;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2); border: 1px solid #ccc; font-weight: 700;
         }
-
         .card-img { height: 200px; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.3)); object-fit: contain; }
-
-        .prompt-label {
-            font-size: 1.4rem; font-weight: 900; letter-spacing: 2px;
-            margin-bottom: 10px; background: rgba(0,0,0,0.08);
-            padding: 4px 15px; border-radius: 20px; text-transform: uppercase;
-        }
+        .prompt-label { font-size: 1.4rem; font-weight: 900; letter-spacing: 2px; margin-bottom: 10px; background: rgba(0,0,0,0.08); padding: 4px 15px; border-radius: 20px; text-transform: uppercase; }
 
         .input-area { min-height: 90px; margin: 10px 0; }
         input[type="text"], input[type="number"] { padding: 10px; border-radius: 8px; border: 1px solid var(--btn-color); background: var(--card-bg); color: var(--text-color); font-size: 1rem; }
@@ -157,9 +150,7 @@
 
         .heat-map { display: grid; grid-template-columns: repeat(13, 1fr); gap: 3px; background: rgba(0,0,0,0.1); padding: 8px; border-radius: 8px; margin-bottom: 15px; }
         .heat-cell { aspect-ratio: 1; font-size: 0.65em; display: flex; align-items: center; justify-content: center; background: var(--heat-base); border-radius: 3px; font-weight: bold; color: var(--text-color); }
-        
         .debug-console { font-size: 0.65em; background: rgba(0,0,0,0.1); color: var(--text-color); padding: 5px; border-radius: 5px; height: 1.2em; overflow: hidden; font-family: monospace; opacity: 0.6; margin-top: 10px; }
-
         .hidden { display: none; }
     </style>
 </head>
@@ -196,10 +187,7 @@
         </div>
     </div>
 
-    <div id="stackTray" class="hidden">
-        <div id="stackList" class="stack-grid"></div>
-    </div>
-
+    <div id="stackTray" class="hidden"><div id="stackList" class="stack-grid"></div></div>
     <div id="heatMap" class="heat-map hidden"></div>
 
     <div id="settingsTray" class="hidden">
@@ -222,14 +210,7 @@
         <div style="font-weight: bold; margin-bottom: 10px; border-bottom: 1px solid var(--border-color); padding-bottom: 10px;">Lifetime Accuracy: <span id="lifetime-pct">0%</span></div>
         <table class="history-table">
             <thead>
-                <tr>
-                    <th>Session</th>
-                    <th>✔/✖</th>
-                    <th>Total</th>
-                    <th>Acc %</th>
-                    <th>Time</th>
-                    <th>Pace</th>
-                </tr>
+                <tr><th>Session</th><th>✔/✖</th><th>Total</th><th>Acc %</th><th>Time</th><th>Pace</th></tr>
             </thead>
             <tbody id="historyBody"></tbody>
         </table>
@@ -242,7 +223,6 @@
     </div>
 
     <div id="display" class="card-display">Ready?</div>
-
     <div class="input-area">
         <div id="typeInputGroup" class="hidden"><input type="text" id="answer" placeholder="Ex: 4H or 15" autocomplete="off" style="width: 80%;"></div>
         <div id="choiceInputGroup" class="choice-container"></div>
@@ -266,10 +246,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">
-        Version 1.2
-    </div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.3</div>
 </div>
 
 <script>
@@ -281,8 +258,7 @@
     let heatData = Array(53).fill(0);
     let sessionHistory = [];
     let cardStats = {}; 
-    let activeTimerStart = null, totalActiveTime = 0; 
-    let wakeLock = null;
+    let activeTimerStart = null, totalActiveTime = 0, wakeLock = null;
 
     function getCardDisplayHtml(code) {
         if (!code) return "";
@@ -316,7 +292,6 @@
     }
 
     function toggleModeTray() { document.getElementById('modeTray').classList.toggle('hidden'); }
-
     function showCardStat(pos) {
         const data = cardStats[pos] || {c: 0, w: 0, time: 0};
         const total = data.c + data.w;
@@ -330,7 +305,6 @@
     }
 
     function closeModal() { document.getElementById('cardModal').classList.add('hidden'); }
-
     function saveAll() {
         const data = { inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, minRange: document.getElementById('minRange').value, maxRange: document.getElementById('maxRange').value, totalActiveTime, cardStats };
         localStorage.setItem('redfordTrainer_v23', JSON.stringify(data));
@@ -400,14 +374,8 @@
         btn.classList.toggle('active', voiceMode);
         btn.innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
         document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
-        if(voiceMode) {
-            requestWakeLock();
-            initVoiceRecognition();
-            speak("Voice mode activated.");
-        } else {
-            releaseWakeLock();
-            if(recognition) recognition.stop();
-        }
+        if(voiceMode) { requestWakeLock(); initVoiceRecognition(); speak("Voice mode activated."); } 
+        else { releaseWakeLock(); if(recognition) recognition.stop(); }
         saveAll();
     }
 
@@ -495,6 +463,7 @@
     }
 
     function updateUI() { document.getElementById('score-correct').innerText = stats.correct; document.getElementById('score-wrong').innerText = stats.wrong; document.getElementById('score-total').innerText = stats.total; renderHistory(); renderHeatMap(); }
+    
     function renderHistory() {
         const body = document.getElementById('historyBody'); body.innerHTML = "";
         let totalC = 0, totalT = 0, maxPct = 0, minSpeed = 999;
@@ -505,6 +474,7 @@
         });
         document.getElementById('lifetime-pct').innerText = totalT > 0 ? Math.round((totalC / totalT) * 100) + "%" : "0%";
     }
+
     function renderHeatMap() {
         const container = document.getElementById('heatMap'); container.innerHTML = "";
         for (let i = 1; i <= 52; i++) {
@@ -515,6 +485,7 @@
             container.appendChild(cell);
         }
     }
+
     function clearHistory() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
     document.getElementById('answer').addEventListener('keypress', (e) => { if (e.key === 'Enter') validate(e.target.value); });
 
@@ -523,24 +494,17 @@
     ------------------------------------------------------------------- */
     const voiceNames = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
     let isSpeaking = false, audioContext, preferredVoice = null;
-
     function loadVoices() {
         let voices = window.speechSynthesis.getVoices();
-        preferredVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en-US')) ||
-                         voices.find(v => v.name.includes('Premium')) ||
-                         voices.find(v => v.lang.includes('en-US')) ||
-                         voices[0];
+        preferredVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('en-US')) || voices.find(v => v.name.includes('Premium')) || voices.find(v => v.lang.includes('en-US')) || voices[0];
     }
-
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices();
+    window.speechSynthesis.onvoiceschanged = loadVoices; loadVoices();
 
     function resumeAudio() {
         try {
             if (!audioContext) audioContext = new (window.AudioContext || window.webkitAudioContext)();
             if (audioContext.state === 'suspended') audioContext.resume();
-            const utterance = new SpeechSynthesisUtterance("");
-            window.speechSynthesis.speak(utterance);
+            const utterance = new SpeechSynthesisUtterance(""); window.speechSynthesis.speak(utterance);
         } catch (e) { console.log("Audio Resume Error:", e); }
     }
 
@@ -552,12 +516,9 @@
     }
 
     function speak(text) {
-        if(!voiceMode) return;
-        window.speechSynthesis.cancel();
-        resumeAudio();
+        if(!voiceMode) return; window.speechSynthesis.cancel(); resumeAudio();
         setTimeout(() => {
-            let msg = new SpeechSynthesisUtterance(text);
-            if (preferredVoice) msg.voice = preferredVoice;
+            let msg = new SpeechSynthesisUtterance(text); if (preferredVoice) msg.voice = preferredVoice;
             msg.rate = 1.05; msg.pitch = 1.0; msg.volume = 1.0;
             msg.onstart = () => { isSpeaking = true; updateMicIcon(false); };
             msg.onend = () => { isSpeaking = false; updateMicIcon(true); };
@@ -566,126 +527,51 @@
     }
 
     function updateMicIcon(isListening) {
-        const micBtn = document.getElementById('micStatus');
-        if(!micBtn) return;
-        if(isListening && voiceMode) micBtn.classList.add('listening');
-        else micBtn.classList.remove('listening');
+        const micBtn = document.getElementById('micStatus'); if(!micBtn) return;
+        if(isListening && voiceMode) micBtn.classList.add('listening'); else micBtn.classList.remove('listening');
     }
 
     let recognition;
     function initVoiceRecognition() {
         const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
-        if(!SpeechRecognition) { 
-            document.getElementById('voiceDebug').innerText = "System: No Speech Engine Found";
-            return; 
-        }
-        
+        if(!SpeechRecognition) { document.getElementById('voiceDebug').innerText = "System: No Speech Engine Found"; return; }
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-            navigator.mediaDevices.getUserMedia({ audio: true })
-                .then(function(stream) {
-                    document.getElementById('voiceDebug').innerText = "Hardware: Mic Access Granted";
-                    startRecognitionEngine(SpeechRecognition);
-                })
-                .catch(function(err) {
-                    document.getElementById('voiceDebug').innerText = "Hardware Error: " + err.name;
-                    startRecognitionEngine(SpeechRecognition);
-                });
-        } else {
-            startRecognitionEngine(SpeechRecognition);
-        }
+            navigator.mediaDevices.getUserMedia({ audio: true }).then(function(stream) {
+                document.getElementById('voiceDebug').innerText = "Hardware: Mic Access Granted"; startRecognitionEngine(SpeechRecognition);
+            }).catch(function(err) { document.getElementById('voiceDebug').innerText = "Hardware Error: " + err.name; startRecognitionEngine(SpeechRecognition); });
+        } else { startRecognitionEngine(SpeechRecognition); }
     }
 
     function startRecognitionEngine(SpeechComp) {
         if(recognition) { recognition.onend = null; recognition.stop(); }
-        
-        recognition = new SpeechComp();
-        recognition.continuous = true; 
-        recognition.interimResults = false; 
-        recognition.lang = 'en-US';
-        recognition.maxAlternatives = 3; 
-
+        recognition = new SpeechComp(); recognition.continuous = true; recognition.interimResults = false; recognition.lang = 'en-US'; recognition.maxAlternatives = 3; 
         recognition.onresult = (event) => {
-            if (isSpeaking) return; 
-            const results = event.results[event.results.length - 1];
+            if (isSpeaking) return; const results = event.results[event.results.length - 1];
             for (let i = 0; i < results.length; i++) {
-                let transcript = results[i].transcript.toLowerCase();
-                document.getElementById('voiceDebug').innerText = "Heard: " + transcript;
+                let transcript = results[i].transcript.toLowerCase(); document.getElementById('voiceDebug').innerText = "Heard: " + transcript;
                 if (processVoiceInput(transcript)) break;
             }
         };
-        
-        recognition.onerror = (e) => { 
-            document.getElementById('voiceDebug').innerText = "Mic error: " + e.error;
-            if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 1000);
-        };
-        
-        recognition.onend = () => { 
-            if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); 
-        };
-        
-        try { 
-            recognition.start(); 
-            updateMicIcon(true); 
-            if(document.getElementById('voiceDebug').innerText.includes("standby")) {
-                document.getElementById('voiceDebug').innerText = "Mic Engine Started";
-            }
-        } catch(e) { console.log("Mic Start Fail:", e); }
+        recognition.onerror = (e) => { document.getElementById('voiceDebug').innerText = "Mic error: " + e.error; if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 1000); };
+        recognition.onend = () => { if(voiceMode) setTimeout(() => { try { recognition.start(); } catch(err) {} }, 100); };
+        try { recognition.start(); updateMicIcon(true); } catch(e) { console.log("Mic Start Fail:", e); }
     }
 
     function processVoiceInput(text) {
-        let input = text.toLowerCase().trim();
-        document.getElementById('voiceDebug').innerText = "Heard: " + input;
-
-        const phoneticMap = {
-            "to": "2", "too": "2", "two": "2",
-            "three": "3", "tree": "3",
-            "for": "4", "fore": "4", "four": "4", "floor": "4",
-            "five": "5", "fine": "5", "fire": "5", "hive": "5", "find": "5",
-            "six": "6", "sex": "6",
-            "seven": "7", "heaven": "7", "savin": "7", "level": "7",
-            "ate": "8", "eight": "8", "aitch": "8",
-            "nine": "9", "line": "9", "mine": "9",
-            "ten": "10", "tin": "10", "then": "10",
-            "one": "1", "won": "1"
-        };
-
-        for (let word in phoneticMap) {
-            let reg = new RegExp("\\b" + word + "\\b", "g");
-            input = input.replace(reg, phoneticMap[word]);
-        }
-
+        let input = text.toLowerCase().trim(); document.getElementById('voiceDebug').innerText = "Heard: " + input;
+        const phoneticMap = { "to": "2", "too": "2", "two": "2", "three": "3", "tree": "3", "for": "4", "fore": "4", "four": "4", "floor": "4", "five": "5", "fine": "5", "fire": "5", "hive": "5", "find": "5", "six": "6", "sex": "6", "seven": "7", "heaven": "7", "savin": "7", "level": "7", "ate": "8", "eight": "8", "aitch": "8", "nine": "9", "line": "9", "mine": "9", "ten": "10", "tin": "10", "then": "10", "one": "1", "won": "1" };
+        for (let word in phoneticMap) { let reg = new RegExp("\\b" + word + "\\b", "g"); input = input.replace(reg, phoneticMap[word]); }
         const suits = { "hearts": "H", "heart": "H", "diamonds": "D", "diamond": "D", "clubs": "C", "club": "C", "spades": "S", "spade": "S" };
         const faces = { "ace": "A", "ice": "A", "king": "K", "can": "K", "queen": "Q", "green": "Q", "quinn": "Q", "jack": "J", "check": "J", "ten": "10" };
-        
         let foundSuit = null, foundVal = null;
-
         for (let s in suits) { if (input.includes(s)) { foundSuit = suits[s]; break; } }
         for (let f in faces) { if (input.includes(f)) { foundVal = faces[f]; break; } }
-        
-        if (!foundVal) {
-            let numMatch = input.match(/(10|[1-9])/); 
-            if (numMatch) foundVal = numMatch[0];
-        }
-
-        if (foundSuit && foundVal) {
-            validate(foundVal + foundSuit);
-            return true;
-        } else {
-            let digits = input.match(/\d+/);
-            if (digits) {
-                if (currentMode === 'N2C' && digits[0] == currentTarget.pos) return false;
-                validate(digits[0]);
-                return true;
-            }
-        }
+        if (!foundVal) { let numMatch = input.match(/(10|[1-9])/); if (numMatch) foundVal = numMatch[0]; }
+        if (foundSuit && foundVal) { validate(foundVal + foundSuit); return true; } 
+        else { let digits = input.match(/\d+/); if (digits) { if (currentMode === 'N2C' && digits[0] == currentTarget.pos) return false; validate(digits[0]); return true; } }
         return false;
     }
-
-    async function requestWakeLock() { 
-        try { 
-            if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); 
-        } catch (err) {} 
-    }
+    async function requestWakeLock() { try { if ('wakeLock' in navigator) wakeLock = await navigator.wakeLock.request('screen'); } catch (err) {} }
     function releaseWakeLock() { if(wakeLock) { wakeLock.release(); wakeLock = null; } }
     loadAll();
 </script>
