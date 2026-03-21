@@ -94,12 +94,10 @@
         .stack-num { font-weight: 800; font-size: 0.8em; color: var(--text-color); background: var(--num-bg); padding: 2px 0; width: 100%; }
         .stack-val-label { padding: 4px 0; font-weight: bold; font-size: 1.1em; }
 
-        /* MODALS */
         .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); display: flex; align-items: center; justify-content: center; z-index: 1000; }
         .modal-content { background: var(--container-bg); padding: 25px; border-radius: 15px; max-width: 500px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 5px 30px rgba(0,0,0,0.5); border: 2px solid var(--btn-color); position: relative; text-align: left; }
         .modal-close { position: absolute; top: 10px; right: 10px; font-size: 2rem; cursor: pointer; font-weight: 900; color: var(--btn-color); line-height: 1; }
 
-        /* HELP STYLES (MATCHING HELP.HTML) */
         .help-section { background: rgba(0,0,0,0.03); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--btn-color); }
         .help-alert { background: rgba(188, 71, 73, 0.08); padding: 15px; border-radius: 8px; margin-bottom: 15px; border-left: 4px solid var(--wrong-color); }
         .help-mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; }
@@ -266,10 +264,11 @@
     </div>
 
     <div id="display" class="card-display">Ready?</div>
+    
     <div class="input-area">
         <div id="typeInputGroup" class="hidden"><input type="text" id="answer" placeholder="Ex: 4H or 15" autocomplete="off" style="width: 80%;"></div>
-        <div id="feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
         <div id="choiceInputGroup" class="choice-container"></div>
+        <div id="feedback" style="margin-top: 10px; font-weight: bold; height: 20px;"></div>
     </div>
 
     <div class="btn-group">
@@ -289,7 +288,7 @@
     </div>
     
     <div id="voiceDebug" class="debug-console">Mic status: standby</div>
-    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.1</div>
+    <div style="font-size: 0.6rem; opacity: 0.3; margin-top: 15px; text-align: center; width: 100%;">Version 1.4.2</div>
 </div>
 
 <script>
