@@ -234,14 +234,12 @@
         <div class="credit-footer">
             <h3>🛠️ Support & Development</h3>
             <p>This tool is provided free to the magic community by <b>Keith Runion</b>.</p>
-            
             <button onclick="openImgPreview('redford-stack-trainer-qrcode.png', 'Scan to Share')" class="crib-btn" style="background:var(--ai-color); margin-bottom:15px; width:80%;">📲 Scan to Share App</button>
-            
             <p>Found a bug or have a suggestion? <br>
                <a href="mailto:keithrunion@gmail.com" class="credit-link">keithrunion@gmail.com</a>
             </p>
             <a href="https://knox2026.github.io/Redford-Stack-Trainer/" class="update-link">🔄 Check for Latest Updates</a>
-            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.4.8.1</p>
+            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.4.9</p>
         </div>
     </div>
 </div>
@@ -495,15 +493,17 @@
     }
 
     function toggleAI() { aiMode=!aiMode; document.getElementById('aiBtn').innerText = aiMode?"AI: ON":"AI: OFF"; document.getElementById('aiBtn').classList.toggle('active', aiMode); saveAll(); }
-    function toggleVoice() { voiceMode=!voiceMode; document.getElementById('voiceBtn').innerText = voiceMode?"Voice: ON":"Voice: OFF"; document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('micStatus').classList.toggle('active-mode', voiceMode); if(voiceMode) initVoiceRecognition(); saveAll(); }
+    function toggleVoice() { voiceMode=!voiceMode; document.getElementById('voiceBtn').innerText = voiceMode?"Voice: ON":"Voice: OFF"; document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('micStatus').classList.toggle('active-mode', voiceMode); if(voiceMode) initVoiceRecognition(); else if(recognition) { recognition.stop(); document.getElementById('voiceDebug').innerText = "Mic status: standby"; } saveAll(); }
     
     let recognition;
     function initVoiceRecognition() {
-        const R = window.webkitSpeechRecognition || window.SpeechRecognition; if(!R) return;
+        const R = window.webkitSpeechRecognition || window.SpeechRecognition; if(!R) { document.getElementById('voiceDebug').innerText = "Error: Browser not supported"; return; }
         recognition = new R(); recognition.continuous=true; recognition.lang='en-US';
-        recognition.onresult = (e) => { const t = e.results[e.results.length-1][0].transcript; processVoiceInput(t); };
-        recognition.onend = () => { if(voiceMode) recognition.start(); };
-        try { recognition.start(); updateMicIcon(true); } catch(e){}
+        recognition.onstart = () => { document.getElementById('voiceDebug').innerText = "Mic status: Active (Listening...)"; updateMicIcon(true); };
+        recognition.onresult = (e) => { const t = e.results[e.results.length-1][0].transcript; document.getElementById('voiceDebug').innerText = "Heard: " + t; processVoiceInput(t); };
+        recognition.onerror = (e) => { document.getElementById('voiceDebug').innerText = "Mic Error: " + e.error; };
+        recognition.onend = () => { if(voiceMode) { recognition.start(); } else { document.getElementById('voiceDebug').innerText = "Mic status: standby"; } };
+        try { recognition.start(); } catch(e){}
     }
     function processVoiceInput(t) {
         let i = t.toLowerCase(); const map = {"to":"2","too":"2","two":"2","three":"3","for":"4","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9","ten":"10","one":"1"};
