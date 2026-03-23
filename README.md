@@ -13,7 +13,7 @@ This tool is designed for magicians who want to move beyond memorization and int
 * **🤖 AI Spaced Repetition:** The app identifies your "weak links" and uses heat-map logic to drill them more frequently until they are mastered.
 * **🔥 Dynamic Heat Map:** Visual feedback on your stack mastery. Blue is mastered; Red needs work.
 * **🏆 Performance Tracking:** Earn the **⭐ Precision** badge for accuracy and the **⚡ Speed** badge for your fastest pace.
-* **📦 Built-in Crib:** Includes a high-resolution card box crib for your Bicycle Poker card box.
+* **📦 Built-in Crib:** Includes a high-resolution card box crib for your Bicycle Poker-sized card box.
 
 ---
 
