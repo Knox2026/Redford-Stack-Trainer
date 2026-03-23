@@ -181,7 +181,7 @@
         <img id="previewTarget" src="" alt="Preview">
     </div>
     <div style="color: white; font-size: 0.8rem; margin-top: 10px; opacity: 0.7; padding-bottom: 20px;">
-        Long-press image to Save or Print
+        Long-press image to Save or Share
     </div>
 </div>
 
@@ -197,7 +197,7 @@
                 <li><b>📋 Clipboard:</b> View full stack. Tap any card for lifetime stats.</li>
                 <li><b>🔥 Fire:</b> Heat Map. (Red = Slow/Wrong, Blue = Mastered).</li>
                 <li><b>🏆 Stats:</b> Track current session accuracy and Pace.</li>
-                <li><b>⚙ Settings:</b> Adjust card range and toggle AI/Voice modes.</li>
+                <li><b>⚙ Settings:</b> Adjust card range and activate AI and Voice Modes.</li>
                 <li><b>🎤 Mic Icon:</b> Active in Voice Mode. A <span class="mic-glow-text">Green Glow</span> means the app is actively listening.</li>
             </ul>
         </div>
@@ -218,6 +218,16 @@
         </div>
 
         <div class="help-section">
+            <h2>🤖 What is AI Mode?</h2>
+            <p style="font-size:0.85rem;">AI Mode uses a personalized <b>Spaced Repetition</b> system. The app tracks which cards you struggle with (slow response or wrong answer) and intelligently brings them up more frequently. Mastery reduces card frequency, focusing your time on weak links.</p>
+        </div>
+
+        <div class="help-section">
+            <h2>🎤 What is Voice Mode?</h2>
+            <p style="font-size:0.85rem;">Voice Mode allow for a <b>hands-free</b> session. When activated, the app "listens" for your answer. Simply say the card name (e.g., "Five of Hearts") or number (e.g., "Fifteen"). The app validates and automatically proceeds.</p>
+        </div>
+
+        <div class="help-section">
             <h2>📊 Mic Status & Feedback</h2>
             <ul>
                 <li><b>Mic Status:</b> Shows if hardware is standby, active, or blocked.</li>
@@ -233,20 +243,21 @@
 
         <div class="help-section" style="border-left: 4px solid var(--correct-color);">
             <h2 style="color: var(--correct-color);">🎁 Special Bonus: Card Box Crib</h2>
-            <p style="font-size:0.85rem;">Free card box crib reference with hidden shuffle sequence in UPC code (Si Stebbins to Redford).</p>
+            <p style="font-size:0.85rem;">Free card box crib reference with hidden shuffle sequence in UPC code (Si Stebbins to Redford). Sized for Bicycle Poker (2.56" x 3.63").</p>
             <button onclick="openImgPreview('crib.png', 'Card Box Crib')" class="crib-btn">View Crib</button>
-            <p style="font-size:0.75rem; margin-top:10px; font-style:italic;">Note: Sized for Bicycle Poker (2.56" x 3.63"). Print at <b>"Actual Size" (100% Scale)</b>.</p>
         </div>
 
         <div class="credit-footer">
             <h3>🛠️ Support & Development</h3>
-            <p>This tool is provided free to the magic community by <b>Keith Runion</b>.</p>
-            <button onclick="openImgPreview('redford-stack-trainer-qrcode.png', 'Scan to Share')" class="crib-btn" style="background:var(--ai-color); margin-bottom:15px; width:80%;">📲 Scan to Share App</button>
+            <p>This tool is provided free to the magic community by <br><b>Keith Runion</b>.</p>
+            
+            <button onclick="openImgPreview('redford-stack-trainer-qrcode.png', 'Scan to Share')" class="crib-btn" style="background:var(--ai-color); margin-bottom:15px; width:80%;">📲 Click to Share App</button>
+            
             <p>Found a bug or have a suggestion? <br>
                <a href="mailto:keithrunion@gmail.com" class="credit-link">keithrunion@gmail.com</a>
             </p>
             <a href="https://knox2026.github.io/Redford-Stack-Trainer/" class="update-link">🔄 Check for Latest Updates</a>
-            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.4.9.1</p>
+            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.5.0</p>
         </div>
     </div>
 </div>
@@ -494,7 +505,7 @@
         saveAll();
     }
 
-    function speak(t) { if(!voiceMode) return; window.speechSynthesis.cancel(); let m = new SpeechSynthesisUtterance(t); m.onstart=()=>updateMicIcon(false); m.onend=()=>updateMicIcon(true); window.speechSynthesis.speak(m); }
+    function speak(t) { if(!voiceMode && !t.includes("activated")) return; window.speechSynthesis.cancel(); let m = new SpeechSynthesisUtterance(t); m.onstart=()=>updateMicIcon(false); m.onend=()=>updateMicIcon(true); window.speechSynthesis.speak(m); }
     function updateMicIcon(l) { document.getElementById('micStatus').classList.toggle('listening', l && voiceMode); }
     function getSpeakableCardName(c) {
         if(!isNaN(c)) return c; const names = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
@@ -502,7 +513,7 @@
     }
 
     function toggleAI() { aiMode=!aiMode; document.getElementById('aiBtn').innerText = aiMode?"AI: ON":"AI: OFF"; document.getElementById('aiBtn').classList.toggle('active', aiMode); saveAll(); }
-    function toggleVoice() { voiceMode=!voiceMode; document.getElementById('voiceBtn').innerText = voiceMode?"Voice: ON":"Voice: OFF"; document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('micStatus').classList.toggle('active-mode', voiceMode); if(voiceMode) initVoiceRecognition(); else if(recognition) { recognition.stop(); document.getElementById('voiceDebug').innerText = "Mic status: standby"; } saveAll(); }
+    function toggleVoice() { voiceMode=!voiceMode; if(voiceMode) speak("Voice mode activated"); document.getElementById('voiceBtn').innerText = voiceMode?"Voice: ON":"Voice: OFF"; document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('micStatus').classList.toggle('active-mode', voiceMode); if(voiceMode) initVoiceRecognition(); else if(recognition) { recognition.stop(); document.getElementById('voiceDebug').innerText = "Mic status: standby"; } saveAll(); }
     
     let recognition;
     function initVoiceRecognition() {
@@ -511,7 +522,7 @@
         recognition.onstart = () => { document.getElementById('voiceDebug').innerText = "Mic status: Active (Listening...)"; updateMicIcon(true); };
         recognition.onresult = (e) => { const t = e.results[e.results.length-1][0].transcript; document.getElementById('voiceDebug').innerText = "Heard: " + t; processVoiceInput(t); };
         recognition.onerror = (e) => { document.getElementById('voiceDebug').innerText = "Mic Error: " + e.error; };
-        recognition.onend = () => { if(voiceMode) { recognition.start(); } else { document.getElementById('voiceDebug').innerText = "Mic status: standby"; } };
+        recognition.onend = () => { if(voiceMode) { try{recognition.start();}catch(err){} } else { document.getElementById('voiceDebug').innerText = "Mic status: standby"; } };
         try { recognition.start(); } catch(e){}
     }
     function processVoiceInput(t) {
