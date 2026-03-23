@@ -25,7 +25,7 @@ This is a **Progressive Web App (PWA)**. You don't need an App Store to install 
 2. Tap the **Share** button (iOS) or **Menu** (Android).
 3. Select **"Add to Home Screen."**
 4. Then click install. The app will now appear on your phone just like a native application!
-
+---
     ** Developer Note for Users:
 If you do not see the latest version after updating or if your phone keeps reverting to an older version, your phone is holding on to old cache versions. Perform a hard reset of the app:
 Delete the app from your home screen.
