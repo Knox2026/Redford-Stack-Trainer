@@ -1,4 +1,4 @@
-# 🃏 Redford Stack Trainer Pro
+# Redford Stack Trainer Pro
 **The Ultimate Hands-Free Training Tool for the Redford Stack.**
 
 This tool is designed for magicians who want to move beyond memorization and into "automatic" recall. Whether you are a beginner or a seasoned pro, the Redford Stack Trainer adapts to your skill level.
