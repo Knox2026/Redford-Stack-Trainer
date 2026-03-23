@@ -28,7 +28,6 @@ This is a **Progressive Web App (PWA)**. You don't need an App Store to install 
 
 Developer Note for Users:
 If you do not see the latest version after updating or if your phone keeps reverting to an older version, your phone is holding on to old cache versions. Perform a hard reset of the app:
-
 "Hard Refresh" the app on your phone.
 Delete the app from your home screen.
 Clear your browser cache -
