@@ -14,7 +14,7 @@ This tool is designed for magicians who want to move beyond memorization and int
 * **🔥 Dynamic Heat Map:** Visual feedback on your stack mastery. Blue is mastered; Red needs work.
 * **🏆 Performance Tracking:** Earn the **⭐ Precision** badge for accuracy and the **⚡ Speed** badge for your fastest pace.
 * **📦 Built-in Crib:** Includes a high-resolution card box crib for your Bicycle Poker-sized card box.
-* ** 📊 Granular Analytics: Tap any card in the Clipboard (Stack View) to see your lifetime accuracy and average pace for that specific card.
+* 📊 Granular Analytics: Tap any card in the Clipboard (Stack View) to see your lifetime accuracy and average pace for that specific card.
 ---
 
 ## 📱 Installation (How to save to your phone)
