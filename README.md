@@ -12,8 +12,8 @@ This tool is designed for magicians who want to move beyond memorization and int
 * **🎤 Voice Recognition:** Practice 100% hands-free. Perfect for practicing while driving or during your morning routine.
 * **🤖 AI Spaced Repetition:** The app identifies your "weak links" and uses heat-map logic to drill them more frequently until they are mastered.
 * **🔥 Dynamic Heat Map:** Visual feedback on your stack mastery. Blue is mastered; Red needs work.
-* **🏆 Performance Tracking:** Earn the **⭐ Precision** badge for accuracy and the **⚡ Speed** badge for your fastest sessions.
-* **📦 Built-in Crib:** Includes a high-resolution card box crib for the Bicycle Poker box.
+* **🏆 Performance Tracking:** Earn the **⭐ Precision** badge for accuracy and the **⚡ Speed** badge for your fastest pace.
+* **📦 Built-in Crib:** Includes a high-resolution card box crib for your Bicycle Poker card box.
 
 ---
 
@@ -24,7 +24,7 @@ This is a **Progressive Web App (PWA)**. You don't need an App Store to install 
 1. Visit the [Live Link](https://knox2026.github.io/Redford-Stack-Trainer/) in Safari (iOS) or Chrome (Android).
 2. Tap the **Share** button (iOS) or **Menu** (Android).
 3. Select **"Add to Home Screen."**
-4. The app will now appear on your phone just like a native application!
+4. Then click install. The app will now appear on your phone just like a native application!
 
 ---
 
