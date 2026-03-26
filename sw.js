@@ -1,7 +1,6 @@
 const CACHE_NAME = 'stack-trainer-v1.5.0';
 const ASSETS = [
   'index.html',
-  'help.html',
   'manifest.json',
   'rsl.png',
   'sw.js'
