@@ -1,4 +1,4 @@
-const CACHE_NAME = 'stack-trainer-v1.5.1'; // Increment this!
+const CACHE_NAME = 'stack-trainer-v1.5.2'; // Increment this!
 const ASSETS = [
   'index.html',
   'manifest.json',
