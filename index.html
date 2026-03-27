@@ -502,7 +502,7 @@
             sessionHistory.unshift({ date: new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}), total: stats.total, correct: stats.correct, wrong: stats.wrong, pct: Math.round((stats.correct/stats.total)*100), time: formatTime(Math.floor(totalActiveTime / 1000)), speed: (totalActiveTime/1000/stats.total).toFixed(1) });
             if(sessionHistory.length>20) sessionHistory.pop();
         }
-        stats = {correct:0, wrong:0, total:0}; totalActiveTime=0; updateUI(); generateQuestion();
+        stats = {correct:0, wrong:0, total:0}; totalActiveTime=0; updateUI(); generateQuestion();saveAll();
     }
     function formatTime(s) { let m = Math.floor(s/60); return `${m}:${(s%60).toString().padStart(2,'0')}`; }
     function setMode(m, r=true) { currentMode=m; document.querySelectorAll('#modeTray .action-btn').forEach(b=>b.classList.remove('selected-mode')); const activeBtn = document.getElementById(`btn-${m}`); if(activeBtn) activeBtn.classList.add('selected-mode'); if(r) archiveAndRestart(); saveAll(); }
