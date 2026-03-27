@@ -254,10 +254,10 @@
             <button onclick="openImgPreview('redford-stack-trainer-qrcode.png', 'Scan to Share')" class="crib-btn" style="background:var(--ai-color); margin-bottom:15px; width:80%;">📲 Click to Share App</button>
             
             <p>Found a bug or have a suggestion? <br>
-               <a href="mailto:keithrunion@gmail.com" class="credit-link">keithrunion@gmail.com</a>
+                <a href="mailto:keithrunion@gmail.com" class="credit-link">keithrunion@gmail.com</a>
             </p>
             <a href="https://knox2026.github.io/Redford-Stack-Trainer/" class="update-link">🔄 Check for Latest Updates</a>
-            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.5.0</p>
+            <p style="font-size: 0.6rem; opacity: 0.4; margin-top: 10px;">Version 1.5.1</p>
         </div>
     </div>
 </div>
@@ -358,6 +358,8 @@
     let inputMethod = 'choice', aiMode = false, voiceMode = false, currentMode = 'C2N_RAND', currentTarget = null, isDarkMode = false;
     let stats = { correct: 0, wrong: 0, total: 0 }, heatData = Array(53).fill(0), sessionHistory = [], cardStats = {}, totalActiveTime = 0, activeTimerStart = null;
     let skipTimer = null;
+    let wakeLock = null;
+    let isTalking = false;
 
     function toggleHelpModal() { document.getElementById('helpModal').classList.toggle('hidden'); }
     
@@ -408,6 +410,15 @@
         if (!code || !isNaN(code)) return `<b>${code}</b>`;
         const v = code.slice(0, -1), s = code.slice(-1);
         return `<span style="color: ${(s==='H'||s==='D') ? '#bc4749' : (isDarkMode?'#e0e0e0':'black')}">${v}${suitSymbols[s]}</span>`;
+    }
+
+    async function requestWakeLock() {
+        try {
+            if ('wakeLock' in navigator) {
+                wakeLock = await navigator.wakeLock.request('screen');
+                wakeLock.addEventListener('release', () => { wakeLock = null; });
+            }
+        } catch (err) {}
     }
 
     function generateQuestion() {
@@ -505,7 +516,14 @@
         saveAll();
     }
 
-    function speak(t) { if(!voiceMode && !t.includes("activated")) return; window.speechSynthesis.cancel(); let m = new SpeechSynthesisUtterance(t); m.onstart=()=>updateMicIcon(false); m.onend=()=>updateMicIcon(true); window.speechSynthesis.speak(m); }
+    function speak(t) {
+        if(!voiceMode && !t.includes("activated")) return;
+        window.speechSynthesis.cancel();
+        let m = new SpeechSynthesisUtterance(t);
+        m.onstart = () => { isTalking = true; updateMicIcon(false); };
+        m.onend = () => { isTalking = false; updateMicIcon(true); };
+        window.speechSynthesis.speak(m);
+    }
     function updateMicIcon(l) { document.getElementById('micStatus').classList.toggle('listening', l && voiceMode); }
     function getSpeakableCardName(c) {
         if(!isNaN(c)) return c; const names = {"H":"Hearts","D":"Diamonds","C":"Clubs","S":"Spades","J":"Jack","Q":"Queen","K":"King","A":"Ace"};
@@ -526,6 +544,7 @@
         try { recognition.start(); } catch(e){}
     }
     function processVoiceInput(t) {
+        if (isTalking) return; 
         let i = t.toLowerCase(); const map = {"to":"2","too":"2","two":"2","three":"3","for":"4","four":"4","five":"5","six":"6","seven":"7","eight":"8","nine":"9","ten":"10","one":"1"};
         for(let k in map) i = i.replace(new RegExp("\\b"+k+"\\b","g"), map[k]);
         const sMatch = i.match(/hearts|diamonds|clubs|spades/); const vMatch = i.match(/ace|king|queen|jack|10|[1-9]/);
@@ -533,17 +552,32 @@
         else { let d = i.match(/\d+/); if(d) validate(d[0]); }
     }
 
-    function saveAll() { localStorage.setItem('redfordTrainer_v23', JSON.stringify({inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, cardStats, totalActiveTime})); }
+    function saveAll() { 
+        const minRange = document.getElementById('minRange').value;
+        const maxRange = document.getElementById('maxRange').value;
+        localStorage.setItem('redfordTrainer_v23', JSON.stringify({inputMethod, aiMode, voiceMode, currentMode, stats, heatData, sessionHistory, isDarkMode, cardStats, totalActiveTime, minRange, maxRange})); 
+    }
     function loadAll() {
         const s = JSON.parse(localStorage.getItem('redfordTrainer_v23') || "{}");
-        if(s.heatData) { inputMethod=s.inputMethod; aiMode=s.aiMode; voiceMode=s.voiceMode; currentMode=s.currentMode; heatData=s.heatData; sessionHistory=s.sessionHistory; isDarkMode=s.isDarkMode; cardStats=s.cardStats; totalActiveTime=s.totalActiveTime; }
+        if(s.heatData) { 
+            inputMethod=s.inputMethod; aiMode=s.aiMode; voiceMode=s.voiceMode; currentMode=s.currentMode; heatData=s.heatData; sessionHistory=s.sessionHistory; isDarkMode=s.isDarkMode; cardStats=s.cardStats; totalActiveTime=s.totalActiveTime; 
+            if(s.minRange) document.getElementById('minRange').value = s.minRange;
+            if(s.maxRange) document.getElementById('maxRange').value = s.maxRange;
+            if(s.stats) stats = s.stats;
+        }
         document.getElementById('aiBtn').classList.toggle('active', aiMode); document.getElementById('aiBtn').innerText = aiMode ? "AI: ON" : "AI: OFF";
         document.getElementById('voiceBtn').classList.toggle('active', voiceMode); document.getElementById('voiceBtn').innerText = voiceMode ? "Voice: ON" : "Voice: OFF";
         document.getElementById('micStatus').classList.toggle('active-mode', voiceMode);
         setInputMethod(inputMethod); applyTheme(); updateUI(); generateQuestion();
     }
     function clearHistory() { if(confirm("Wipe all data?")) { localStorage.clear(); location.reload(); } }
+
+    document.addEventListener('visibilitychange', async () => {
+        if (wakeLock !== null && document.visibilityState === 'visible') { await requestWakeLock(); }
+    });
+
     loadAll();
+    requestWakeLock();
 </script>
 </body>
 </html>
